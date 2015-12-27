@@ -29,7 +29,7 @@ _btrfs()
 
 	local cmd=${words[1]}
 
-	commands='subvolume filesystem balance device scrub check rescue restore inspect-internal property send receive quota qgroup replace help version'
+	commands='subvolume filesystem balance device scrub check rescue restore inspect-internal property send receive quota qgroup replace dedupe help version'
 	commands_subvolume='create delete list snapshot find-new get-default set-default show sync'
 	commands_filesystem='defragment sync resize show df du label usage'
 	commands_balance='start pause cancel resume status'
@@ -41,6 +41,7 @@ _btrfs()
 	commands_quota='enable disable rescan'
 	commands_qgroup='assign remove create destroy show limit'
 	commands_replace='start status cancel'
+	commands_dedupe='enable'
 
 	if [[ "$cur" == -* && $cword -le 3 && "$cmd" != "help" ]]; then
 		COMPREPLY=( $( compgen -W '--help' -- "$cur" ) )
@@ -96,6 +97,9 @@ _btrfs()
 				;;
 			replace)
 				opts="$commands_replace"
+				;;
+			dedupe)
+				opts="$commands_dedupe"
 				;;
 			help)
 				opts="--full"

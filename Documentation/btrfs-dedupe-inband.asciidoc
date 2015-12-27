@@ -22,7 +22,119 @@ use with caution.
 
 SUBCOMMAND
 ----------
-Nothing yet
+*enable* [options] <path>::
+Enable in-band de-duplication for a filesystem.
++
+`Options`
++
+-f|--force::::
+Force 'enable' command to be exected.
+Will skip memory limit check and allow 'enable' to be executed even in-band
+de-duplication is already enabled.
++
+NOTE: If re-enable dedupe with '-f' option, any unspecified parameter will be
+reset to its default value.
+
+-s|--storage-backend <BACKEND>::::
+Specify de-duplication hash storage backend.
+Only 'inmemory' backend is supported yet.
+If not specified, default value is 'inmemory'.
++
+Refer to *BACKENDS* sector for more information.
+
+-b|--blocksize <BLOCKSIZE>::::
+Specify dedupe block size.
+Supported values are power of 2 from '16K' to '8M'.
+Default value is '128K'.
++
+Refer to *BLOCKSIZE* sector for more information.
+
+-a|--hash-algorithm <HASH>::::
+Specify hash algorithm.
+Only 'sha256' is supported yet.
+
+-l|--limit-hash <LIMIT>::::
+Specify maximum number of hashes stored in memory.
+Only works for 'inmemory' backend.
+Conflicts with '-m' option.
++
+Only positive values are valid.
+Default value is '32K'.
+
+-m|--limit-memory <LIMIT>::::
+Specify maximum memory used for hashes.
+Only works for 'inmemory' backend.
+Conflicts with '-l' option.
++
+Only value larger than or equal to '1024' is valid.
+No default value.
++
+NOTE: Memory limit will be rounded down to kernel internal hash size,
+so the memory limit shown in 'btrfs dedupe status' may be different
+from the <LIMIT>.
+
+WARNING: Too large value for '-l' or '-m' will easily trigger OOM.
+Please use with caution according to system memory.
+
+NOTE: In-band de-duplication is not compactible with compression yet.
+And compression has higher priority than in-band de-duplication, means if
+compression and de-duplication is enabled at the same time, only compression
+will work.
+
+BACKENDS
+--------
+Btrfs in-band de-duplication will support different storage backends, with
+different use case and features.
+
+In-memory backend::
+This backend provides backward-compatibility, and more fine-tuning options.
+But hash pool is non-persistent and may exhaust kernel memory if not setup
+properly.
++
+This backend can be used on old btrfs(without '-O dedupe' mkfs option).
+When used on old btrfs, this backend needs to be enabled manually after mount.
++
+Designed for fast hash search speed, in-memory backend will keep all dedupe
+hashes in memory. (Although overall performance is still much the same with
+'ondisk' backend if all 'ondisk' hash can be cached in memory)
++
+And only keeps limited number of hash in memory to avoid exhausting memory.
+Hashes over the limit will be dropped following Last-Recent-Use behavior.
+So this backend has a consistent overhead for given limit but can\'t ensure
+all duplicated blocks will be de-duplicated.
++
+After umount and mount, in-memory backend need to refill its hash pool.
+
+On-disk backend::
+This backend provides persistent hash pool, with more smart memory management
+for hash pool.
+But it\'s not backward-compatible, meaning it must be used with '-O dedupe' mkfs
+option and older kernel can\'t mount it read-write.
++
+Designed for de-duplication rate, hash pool is stored as btrfs B+ tree on disk.
+This behavior may cause extra disk IO for hash search under high memory
+pressure.
++
+After umount and mount, on-disk backend still has its hash on disk, no need to
+refill its dedupe hash pool.
+
+Currently, only 'inmemory' backend is supported in btrfs-progs.
+
+DEDUPE BLOCK SIZE
+----------------
+In-band de-duplication is done at dedupe block size.
+Any data smaller than dedupe block size won\'t go through in-band
+de-duplication.
+
+And dedupe block size affects dedupe rate and fragmentation heavily.
+
+Smaller block size will cause more fragments, but higher dedupe rate.
+
+Larger block size will cause less fragments, but lower dedupe rate.
+
+In-band de-duplication rate is highly related to the workload pattern.
+So it\'s highly recommended to align dedupe block size to the workload
+block size to make full use of de-duplication.
 
 EXIT STATUS
 -----------
