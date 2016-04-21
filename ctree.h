@@ -2252,6 +2252,7 @@ static inline int btrfs_fs_compat_ro(struct btrfs_fs_info *fs_info, u64 flag)
 	btrfs_item_offset_nr(leaf, slot)))
 
 /* extent-tree.c */
+u64 hash_extent_data_ref(u64 root_objectid, u64 owner, u64 offset);
 int btrfs_reserve_extent(struct btrfs_trans_handle *trans,
 			 struct btrfs_root *root,
 			 u64 num_bytes, u64 empty_size,
