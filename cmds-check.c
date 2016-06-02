@@ -3759,6 +3759,69 @@ out:
 	return err;
 }
 
+static int check_fs_roots_v2(struct btrfs_root *root)
+{
+	struct btrfs_fs_info *fs_info = root->fs_info;
+	struct btrfs_root *tree_root = fs_info->tree_root;
+	struct btrfs_root *cur_root;
+	struct btrfs_path *path;
+	struct btrfs_key key;
+	struct extent_buffer *node;
+	int slot;
+	int ret, err = 0;
+
+	path = btrfs_alloc_path();
+	if (!path)
+		return -ENOMEM;
+
+	key.objectid = BTRFS_FS_TREE_OBJECTID;
+	key.offset = 0;
+	key.type = BTRFS_ROOT_ITEM_KEY;
+
+	ret = btrfs_search_slot(NULL, tree_root, &key, path, 0, 0);
+	if (ret < 0)
+		goto out;
+	if (ret > 0) {
+		err = -ENOENT;
+		goto out;
+	}
+
+	while (1) {
+		node = path->nodes[0];
+		slot = path->slots[0];
+		btrfs_item_key_to_cpu(node, &key, slot);
+		if (key.objectid > BTRFS_LAST_FREE_OBJECTID)
+			goto out;
+		if (key.type != BTRFS_ROOT_ITEM_KEY)
+			goto next;
+		if (!is_fstree(key.objectid))
+			goto next;
+		key.offset = (u64)-1;
+
+		cur_root = btrfs_read_fs_root(fs_info, &key);
+		if (IS_ERR(cur_root) || !cur_root) {
+			fprintf(stderr, "Fail to read fs/subvol tree: %lld\n",
+				key.objectid);
+			err = -EIO;
+			goto out;
+		}
+		ret = check_fs_root_v2(cur_root);
+		err |= ret;
+next:
+		ret = btrfs_next_item(tree_root, path);
+		if (ret > 0)
+			goto out;
+		if (ret < 0) {
+			err = ret;
+			goto out;
+		}
+	}
+
+out:
+	btrfs_free_path(path);
+	return err;
+}
+
 static int all_backpointers_checked(struct extent_record *rec, int print_errs)
 {
 	struct list_head *cur = rec->backrefs.next;
@@ -11300,6 +11363,8 @@ int cmd_check(int argc, char **argv)
 				     BTRFS_FEATURE_INCOMPAT_NO_HOLES);
 	if (!ctx.progress_enabled)
 		fprintf(stderr, "checking fs roots\n");
+	if (low_memory)
+		ret = check_fs_roots_v2(root);
 	ret = check_fs_roots(root, &root_cache);
 	if (ret)
 		goto out;
