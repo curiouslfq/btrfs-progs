@@ -3759,6 +3759,22 @@ out:
 	return err;
 }
 
+static int check_fs_root_v2(struct btrfs_root *root)
+{
+	struct btrfs_path *path;
+	struct btrfs_key key;
+	int ret;
+
+	path = btrfs_alloc_path();
+	if (!path)
+		return -ENOMEM;
+
+	ret = btrfs_search_slot(NULL, root, &key, path, 0, 0);
+
+	btrfs_free_path(path);
+	return 0;
+}
+
 static int check_fs_roots_v2(struct btrfs_root *root)
 {
 	struct btrfs_fs_info *fs_info = root->fs_info;
