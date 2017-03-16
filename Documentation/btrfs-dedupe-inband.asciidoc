@@ -1,0 +1,40 @@
+btrfs-dedupe(8)
+==============
+
+NAME
+----
+btrfs-dedupe-inband - manage in-band (write time) de-duplication of a btrfs
+filesystem
+
+SYNOPSIS
+--------
+*btrfs dedupe-inband* <subcommand> <args>
+
+DESCRIPTION
+-----------
+*btrfs dedupe-inband* is used to enable/disable or show current in-band de-duplication
+status of a btrfs filesystem.
+
+Kernel support for in-band de-duplication starts from 4.8.
+
+WARNING: In-band de-duplication is still an experimental feautre of btrfs,
+use with caution.
+
+SUBCOMMAND
+----------
+Nothing yet
+
+EXIT STATUS
+-----------
+*btrfs dedupe-inband* returns a zero exit status if it succeeds. Non zero is
+returned in case of failure.
+
+AVAILABILITY
+------------
+*btrfs* is part of btrfs-progs.
+Please refer to the btrfs wiki http://btrfs.wiki.kernel.org for
+further details.
+
+SEE ALSO
+--------
+`mkfs.btrfs`(8),
