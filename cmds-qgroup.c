@@ -322,7 +322,7 @@ static int cmd_qgroup_show(int argc, char **argv)
 			{ NULL, 0, NULL, 0 }
 		};
 
-		c = getopt_long(argc, argv, "pcreFf", long_options, NULL);
+		c = getopt_long(argc, argv, "pcPreFf", long_options, NULL);
 		if (c < 0)
 			break;
 		switch (c) {
@@ -333,6 +333,10 @@ static int cmd_qgroup_show(int argc, char **argv)
 		case 'c':
 			btrfs_qgroup_setup_print_column(
 				BTRFS_QGROUP_CHILD);
+			break;
+		case 'P':
+			btrfs_qgroup_setup_print_column(
+				BTRFS_QGROUP_PATH);
 			break;
 		case 'r':
 			btrfs_qgroup_setup_print_column(
