@@ -93,6 +93,8 @@ Show all qgroups in the btrfs filesystem identified by <path>.
 print parent qgroup id.
 -c::::
 print child qgroup id.
+-P::::
+print subvol path.
 -r::::
 print limit of referenced size of qgroup.
 -e::::

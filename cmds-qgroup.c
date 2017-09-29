@@ -277,6 +277,7 @@ static const char * const cmd_qgroup_show_usage[] = {
 	"Show subvolume quota groups.",
 	"-p             print parent qgroup id",
 	"-c             print child qgroup id",
+	"-P             print subvol path",
 	"-r             print limit of referenced size of qgroup",
 	"-e             print limit of exclusive size of qgroup",
 	"-F             list all qgroups which impact the given path",
@@ -322,7 +323,7 @@ static int cmd_qgroup_show(int argc, char **argv)
 			{ NULL, 0, NULL, 0 }
 		};
 
-		c = getopt_long(argc, argv, "pcreFf", long_options, NULL);
+		c = getopt_long(argc, argv, "pcPreFf", long_options, NULL);
 		if (c < 0)
 			break;
 		switch (c) {
@@ -333,6 +334,10 @@ static int cmd_qgroup_show(int argc, char **argv)
 		case 'c':
 			btrfs_qgroup_setup_print_column(
 				BTRFS_QGROUP_CHILD);
+			break;
+		case 'P':
+			btrfs_qgroup_setup_print_column(
+				BTRFS_QGROUP_PATH);
 			break;
 		case 'r':
 			btrfs_qgroup_setup_print_column(
