@@ -120,7 +120,7 @@ show sizes in TiB, or TB with --si.
 --sort=[\+/-]<attr>[,[+/-]<attr>]...::::
 list qgroups in order of <attr>.
 +
-<attr> can be one or more of qgroupid,rfer,excl,max_rfer,max_excl.
+<attr> can be one or more of qgroupid,rfer,excl,max_rfer,max_excl,path.
 +
 Prefix \'+' means ascending order and \'-' means descending order of <attr>.
 If no prefix is given, use ascending order by default.

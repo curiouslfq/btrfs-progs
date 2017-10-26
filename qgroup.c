@@ -415,12 +415,31 @@ static int comp_entry_with_max_excl(struct btrfs_qgroup *entry1,
 	return is_descending ? -ret : ret;
 }
 
+static int comp_entry_with_path(struct btrfs_qgroup *entry1,
+				struct btrfs_qgroup *entry2,
+				int is_descending)
+{
+	int ret;
+
+	if (!entry1->path && !entry2->path)
+		ret = 0;
+	else if (!entry1->path)
+		ret = -1;
+	else if (!entry2->path)
+		ret = 1;
+	else
+		ret = strcmp(entry1->path, entry2->path);
+
+	return is_descending ? -ret : ret;
+}
+
 static btrfs_qgroup_comp_func all_comp_funcs[] = {
 	[BTRFS_QGROUP_COMP_QGROUPID]	= comp_entry_with_qgroupid,
 	[BTRFS_QGROUP_COMP_RFER]	= comp_entry_with_rfer,
 	[BTRFS_QGROUP_COMP_EXCL]	= comp_entry_with_excl,
 	[BTRFS_QGROUP_COMP_MAX_RFER]	= comp_entry_with_max_rfer,
-	[BTRFS_QGROUP_COMP_MAX_EXCL]	= comp_entry_with_max_excl
+	[BTRFS_QGROUP_COMP_MAX_EXCL]	= comp_entry_with_max_excl,
+	[BTRFS_QGROUP_COMP_PATH]	= comp_entry_with_path
 };
 
 static char *all_sort_items[] = {
@@ -429,6 +448,7 @@ static char *all_sort_items[] = {
 	[BTRFS_QGROUP_COMP_EXCL]	= "excl",
 	[BTRFS_QGROUP_COMP_MAX_RFER]	= "max_rfer",
 	[BTRFS_QGROUP_COMP_MAX_EXCL]	= "max_excl",
+	[BTRFS_QGROUP_COMP_PATH]	= "path",
 	[BTRFS_QGROUP_COMP_MAX]		= NULL,
 };
 
