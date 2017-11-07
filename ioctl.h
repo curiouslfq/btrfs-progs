@@ -670,6 +670,11 @@ struct btrfs_ioctl_send_args_64 {
 } __attribute__((packed));
 BUILD_ASSERT(sizeof(struct btrfs_ioctl_send_args_64) == 72);
 
+struct btrfs_ioctl_subvol_undelete_args {
+	__u64 subvol_id;
+	char name[BTRFS_PATH_NAME_MAX + 1];
+};
+
 #define BTRFS_IOC_SEND_64_COMPAT_DEFINED 1
 
 /* Error codes as returned by the kernel */
@@ -828,6 +833,8 @@ static inline char *btrfs_err_str(enum btrfs_err_code err_code)
                                   struct btrfs_ioctl_feature_flags[3])
 #define BTRFS_IOC_RM_DEV_V2	_IOW(BTRFS_IOCTL_MAGIC, 58, \
 				   struct btrfs_ioctl_vol_args_v2)
+#define BTRFS_IOC_SUBVOL_UNDELETE _IOWR(BTRFS_IOCTL_MAGIC, 63, \
+				struct btrfs_ioctl_subvol_undelete_args)
 #ifdef __cplusplus
 }
 #endif
