@@ -1219,6 +1219,74 @@ out:
 	return !!ret;
 }
 
+static const char * const cmd_subvol_undelete_usage[] = {
+	"btrfs subvolume undelete [-n <name>] <subvol_id> <dest>",
+	"Undelete the subvolume of the given <subvol_id> to <dest>.",
+	"",
+	"-n <name>  recover the subvolume with <name>.",
+	NULL
+};
+
+static int cmd_subvol_undelete(int argc, char **argv)
+{
+	struct btrfs_ioctl_subvol_undelete_args args;
+	bool need_assign_name = true;
+	DIR *dirstream = NULL;
+	char *dest;
+	int fd = -1;
+	int ret;
+
+	memset(&args, 0, sizeof(args));
+
+	while (1) {
+		int c = getopt(argc, argv, "n:");
+
+		if (c < 0)
+			break;
+
+		switch (c) {
+		case 'n':
+			strncpy_null(args.name, optarg);
+			need_assign_name = false;
+			break;
+		default:
+			usage(cmd_subvol_undelete_usage);
+		}
+	}
+	if (!need_assign_name) {
+		if (!test_issubvolname(args.name)) {
+			error("invalid subvolume name: %s", args.name);
+			return -EINVAL;
+		} else if (strlen(args.name) > BTRFS_VOL_NAME_MAX) {
+			error("subvolume name too long: %s", args.name);
+			return -EINVAL;
+		}
+	}
+
+	if (check_argc_exact(argc - optind, 2))
+		usage(cmd_subvol_undelete_usage);
+
+	args.subvol_id = arg_strtou64(argv[optind]);
+	if (need_assign_name)
+		snprintf(args.name, BTRFS_VOL_NAME_MAX, "sub_%llu",
+				args.subvol_id);
+
+	dest = argv[optind + 1];
+	fd = btrfs_open_dir(dest, &dirstream, 1);
+	if (fd < 0) {
+		error("can't access '%s'", dest);
+		return -1;
+	}
+
+	ret = ioctl(fd, BTRFS_IOC_SUBVOL_UNDELETE, &args);
+	if (ret)
+		perror("BTRFS_IOC_SUBVOL_UNDELETE");
+
+	close_file_or_dir(fd, dirstream);
+
+	return ret;
+}
+
 static const char subvolume_cmd_group_info[] =
 "manage subvolumes: create, delete, list, etc";
 
@@ -1237,6 +1305,8 @@ const struct cmd_group subvolume_cmd_group = {
 			NULL, 0 },
 		{ "show", cmd_subvol_show, cmd_subvol_show_usage, NULL, 0 },
 		{ "sync", cmd_subvol_sync, cmd_subvol_sync_usage, NULL, 0 },
+		{ "undelete", cmd_subvol_undelete, cmd_subvol_undelete_usage,
+			NULL, 0 },
 		NULL_CMD_STRUCT
 	}
 };
