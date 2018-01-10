@@ -113,7 +113,7 @@ static void print_old_roots(struct btrfs_super_block *super)
 		printf("\t\t%llu used %llu total %llu devices\n",
 		(unsigned long long)btrfs_stack_backup_bytes_used(backup),
 		(unsigned long long)btrfs_stack_backup_total_bytes(backup),
-		(unsigned long long)btrfs_backup_num_devices(backup));
+		(unsigned long long)btrfs_stack_backup_num_devices(backup));
 	}
 }
 

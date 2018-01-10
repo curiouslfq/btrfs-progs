@@ -182,7 +182,7 @@ static void print_root_backup(struct btrfs_root_backup *backup)
 	printf("\t\tbackup_bytes_used:\t%llu\n",
 					btrfs_stack_backup_bytes_used(backup));
 	printf("\t\tbackup_num_devices:\t%llu\n",
-					btrfs_backup_num_devices(backup));
+					btrfs_stack_backup_num_devices(backup));
 	putchar('\n');
 }
 
