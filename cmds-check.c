@@ -12285,7 +12285,7 @@ static int check_tree_block_backref(struct btrfs_fs_info *fs_info, u64 root_id,
 	struct btrfs_path path;
 	struct extent_buffer *eb;
 	struct extent_buffer *node;
-	u32 nodesize = btrfs_super_nodesize(fs_info->super_copy);
+	u32 nodesize = btrfs_stack_super_nodesize(fs_info->super_copy);
 	int err = 0;
 	int ret;
 
@@ -12662,7 +12662,7 @@ static int check_extent_item(struct btrfs_trans_handle *trans,
 	unsigned long ptr;
 	int slot = path->slots[0];
 	int type;
-	u32 nodesize = btrfs_super_nodesize(fs_info->super_copy);
+	u32 nodesize = btrfs_stack_super_nodesize(fs_info->super_copy);
 	u32 item_size = btrfs_item_size_nr(eb, slot);
 	u64 flags;
 	u64 offset;
@@ -12952,7 +12952,7 @@ static int check_block_group_item(struct btrfs_fs_info *fs_info,
 	struct btrfs_chunk *chunk;
 	struct extent_buffer *leaf;
 	struct btrfs_extent_item *ei;
-	u32 nodesize = btrfs_super_nodesize(fs_info->super_copy);
+	u32 nodesize = btrfs_stack_super_nodesize(fs_info->super_copy);
 	u64 flags;
 	u64 bg_flags;
 	u64 used;

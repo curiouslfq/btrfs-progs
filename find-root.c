@@ -110,7 +110,7 @@ int btrfs_find_root_search(struct btrfs_fs_info *fs_info,
 	u64 chunk_offset = 0;
 	u64 chunk_size = 0;
 	u64 offset = 0;
-	u32 nodesize = btrfs_super_nodesize(fs_info->super_copy);
+	u32 nodesize = btrfs_stack_super_nodesize(fs_info->super_copy);
 	int suppress_errors = 0;
 	int ret = 0;
 

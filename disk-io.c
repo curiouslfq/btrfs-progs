@@ -1163,7 +1163,7 @@ static struct btrfs_fs_info *__open_ctree_fd(int fp, const char *path,
 
 	memcpy(fs_info->fsid, &disk_super->fsid, BTRFS_FSID_SIZE);
 	fs_info->sectorsize = btrfs_stack_super_sectorsize(disk_super);
-	fs_info->nodesize = btrfs_super_nodesize(disk_super);
+	fs_info->nodesize = btrfs_stack_super_nodesize(disk_super);
 	fs_info->stripesize = btrfs_super_stripesize(disk_super);
 
 	ret = btrfs_check_fs_compatibility(fs_info->super_copy, flags);
@@ -1340,13 +1340,13 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 			btrfs_stack_super_log_root(sb));
 		goto error_out;
 	}
-	if (btrfs_super_nodesize(sb) < 4096) {
+	if (btrfs_stack_super_nodesize(sb) < 4096) {
 		error("nodesize too small: %u < 4096",
-			btrfs_super_nodesize(sb));
+			btrfs_stack_super_nodesize(sb));
 		goto error_out;
 	}
-	if (!IS_ALIGNED(btrfs_super_nodesize(sb), 4096)) {
-		error("nodesize unaligned: %u", btrfs_super_nodesize(sb));
+	if (!IS_ALIGNED(btrfs_stack_super_nodesize(sb), 4096)) {
+		error("nodesize unaligned: %u", btrfs_stack_super_nodesize(sb));
 		goto error_out;
 	}
 	if (btrfs_stack_super_sectorsize(sb) < 4096) {
@@ -1363,7 +1363,8 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 		error("invalid total_bytes 0");
 		goto error_out;
 	}
-	if (btrfs_stack_super_bytes_used(sb) < 6 * btrfs_super_nodesize(sb)) {
+	if (btrfs_stack_super_bytes_used(sb) <
+			6 * btrfs_stack_super_nodesize(sb)) {
 		error("invalid bytes_used %llu",
 		      btrfs_stack_super_bytes_used(sb));
 		goto error_out;
