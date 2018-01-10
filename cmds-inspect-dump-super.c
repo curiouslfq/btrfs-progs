@@ -394,7 +394,7 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	printf("bytes_used\t\t%llu\n",
 	       (unsigned long long)btrfs_stack_super_bytes_used(sb));
 	printf("sectorsize\t\t%llu\n",
-	       (unsigned long long)btrfs_super_sectorsize(sb));
+	       (unsigned long long)btrfs_stack_super_sectorsize(sb));
 	printf("nodesize\t\t%llu\n",
 	       (unsigned long long)btrfs_super_nodesize(sb));
 	printf("leafsize (deprecated)\t\t%u\n",

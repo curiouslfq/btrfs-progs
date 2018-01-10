@@ -1090,7 +1090,7 @@ static void update_super_old(u8 *buffer)
 	struct btrfs_super_block *super = (struct btrfs_super_block *)buffer;
 	struct btrfs_chunk *chunk;
 	struct btrfs_disk_key *key;
-	u32 sectorsize = btrfs_super_sectorsize(super);
+	u32 sectorsize = btrfs_stack_super_sectorsize(super);
 	u64 flags = btrfs_stack_super_flags(super);
 
 	flags |= BTRFS_SUPER_FLAG_METADUMP;

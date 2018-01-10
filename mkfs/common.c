@@ -166,7 +166,7 @@ int make_btrfs(int fd, struct btrfs_mkfs_config *cfg)
 	btrfs_set_stack_super_chunk_root(&super, cfg->blocks[MKFS_CHUNK_TREE]);
 	btrfs_set_stack_super_total_bytes(&super, num_bytes);
 	btrfs_set_stack_super_bytes_used(&super, 6 * cfg->nodesize);
-	btrfs_set_super_sectorsize(&super, cfg->sectorsize);
+	btrfs_set_stack_super_sectorsize(&super, cfg->sectorsize);
 	super.__unused_leafsize = cpu_to_le32(cfg->nodesize);
 	btrfs_set_super_nodesize(&super, cfg->nodesize);
 	btrfs_set_super_stripesize(&super, cfg->stripesize);
