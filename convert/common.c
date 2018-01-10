@@ -133,7 +133,7 @@ static int setup_temp_super(int fd, struct btrfs_mkfs_config *cfg,
 	btrfs_set_stack_super_stripesize(super, cfg->stripesize);
 	btrfs_set_stack_super_csum_type(super, BTRFS_CSUM_TYPE_CRC32);
 	btrfs_set_stack_super_chunk_root(super, chunk_bytenr);
-	btrfs_set_super_cache_generation(super, -1);
+	btrfs_set_stack_super_cache_generation(super, -1);
 	btrfs_set_stack_super_incompat_flags(super, cfg->features);
 	if (cfg->label)
 		__strncpy_null(super->label, cfg->label, BTRFS_LABEL_SIZE - 1);

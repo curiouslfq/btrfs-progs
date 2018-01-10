@@ -1185,7 +1185,7 @@ static int update_super(struct mdrestore_struct *mdres, u8 *buffer)
 	}
 
 	if (mdres->clear_space_cache)
-		btrfs_set_super_cache_generation(super, 0);
+		btrfs_set_stack_super_cache_generation(super, 0);
 
 	flags |= BTRFS_SUPER_FLAG_METADUMP_V2;
 	btrfs_set_stack_super_flags(super, flags);

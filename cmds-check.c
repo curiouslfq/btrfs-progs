@@ -8652,9 +8652,10 @@ static int check_space_cache(struct btrfs_root *root)
 	int ret;
 	int error = 0;
 
-	if (btrfs_super_cache_generation(root->fs_info->super_copy) != -1ULL &&
+	if (btrfs_stack_super_cache_generation(root->fs_info->super_copy) !=
+			-1ULL &&
 	    btrfs_stack_super_generation(root->fs_info->super_copy) !=
-	    btrfs_super_cache_generation(root->fs_info->super_copy)) {
+	    btrfs_stack_super_cache_generation(root->fs_info->super_copy)) {
 		printf("cache and super generation don't match, space cache "
 		       "will be invalidated\n");
 		return 0;
@@ -14558,7 +14559,7 @@ static int clear_free_space_cache(struct btrfs_fs_info *fs_info)
 		error("failed to update super block cache generation");
 		return PTR_ERR(trans);
 	}
-	btrfs_set_super_cache_generation(fs_info->super_copy, (u64)-1);
+	btrfs_set_stack_super_cache_generation(fs_info->super_copy, (u64)-1);
 	btrfs_commit_transaction(trans, fs_info->tree_root);
 
 	return ret;
