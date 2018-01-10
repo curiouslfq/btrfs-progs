@@ -2623,7 +2623,8 @@ static int repair_tree_block_ref(struct btrfs_trans_handle *trans,
 			bi = (struct btrfs_tree_block_info *)(ei + 1);
 			memset_extent_buffer(eb, 0, (unsigned long)bi,
 					     sizeof(*bi));
-			btrfs_set_disk_key_objectid(&copy_key, root->objectid);
+			btrfs_set_stack_disk_key_objectid(&copy_key,
+							  root->objectid);
 			btrfs_set_disk_key_type(&copy_key, 0);
 			btrfs_set_disk_key_offset(&copy_key, 0);
 
@@ -4489,7 +4490,7 @@ static int check_fs_root(struct btrfs_root *root,
 		return -EIO;
 
 	if (btrfs_root_refs(root_item) > 0 ||
-	    btrfs_disk_key_objectid(&root_item->drop_progress) == 0) {
+	    btrfs_stack_disk_key_objectid(&root_item->drop_progress) == 0) {
 		path.nodes[level] = root->node;
 		extent_buffer_get(root->node);
 		path.slots[level] = 0;
@@ -6442,7 +6443,7 @@ static int check_fs_first_inode(struct btrfs_root *root, unsigned int ext_ref)
 
 	/* For root being dropped, we don't need to check first inode */
 	if (btrfs_root_refs(&root->root_item) == 0 &&
-	    btrfs_disk_key_objectid(&root->root_item.drop_progress) >=
+	    btrfs_stack_disk_key_objectid(&root->root_item.drop_progress) >=
 	    BTRFS_FIRST_FREE_OBJECTID)
 		return 0;
 
@@ -6588,7 +6589,7 @@ static int check_btrfs_root(struct btrfs_trans_handle *trans,
 	btrfs_init_path(&path);
 
 	if (btrfs_root_refs(root_item) > 0 ||
-	    btrfs_disk_key_objectid(&root_item->drop_progress) == 0) {
+	    btrfs_stack_disk_key_objectid(&root_item->drop_progress) == 0) {
 		path.nodes[level] = root->node;
 		path.slots[level] = 0;
 		extent_buffer_get(root->node);
@@ -9733,7 +9734,7 @@ static int record_extent(struct btrfs_trans_handle *trans,
 			memset_extent_buffer(leaf, 0, (unsigned long)bi,
 					     sizeof(*bi));
 
-			btrfs_set_disk_key_objectid(&copy_key,
+			btrfs_set_stack_disk_key_objectid(&copy_key,
 						    rec->info_objectid);
 			btrfs_set_disk_key_type(&copy_key, 0);
 			btrfs_set_disk_key_offset(&copy_key, 0);
@@ -11544,7 +11545,8 @@ again:
 			offset = btrfs_item_ptr_offset(leaf, path.slots[0]);
 			read_extent_buffer(leaf, &ri, offset, sizeof(ri));
 			last_snapshot = btrfs_root_last_snapshot(&ri);
-			if (btrfs_disk_key_objectid(&ri.drop_progress) == 0) {
+			if (btrfs_stack_disk_key_objectid(&ri.drop_progress)
+					== 0) {
 				level = btrfs_root_level(&ri);
 				ret = add_root_item_to_list(&normal_trees,
 						found_key.objectid,

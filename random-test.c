@@ -201,7 +201,7 @@ static int empty_tree(struct btrfs_trans_handle *trans, struct btrfs_root
 			path.slots[0] -= 1;
 		}
 		slot = path.slots[0];
-		found = btrfs_disk_key_objectid(
+		found = btrfs_stack_disk_key_objectid(
 					&path.nodes[0]->leaf.items[slot].key);
 		ret = btrfs_del_item(trans, root, &path);
 		count++;
@@ -306,7 +306,7 @@ static int fill_radix(struct btrfs_root *root, struct radix_tree_root *radix)
 			slot -= 1;
 		}
 		for (i = slot; i >= 0; i--) {
-			found = btrfs_disk_key_objectid(&path.nodes[0]->
+			found = btrfs_stack_disk_key_objectid(&path.nodes[0]->
 							leaf.items[i].key);
 			radix_tree_preload(GFP_KERNEL);
 			ret = radix_tree_insert(radix, found, (void *)found);

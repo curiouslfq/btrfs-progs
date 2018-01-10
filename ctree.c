@@ -1011,7 +1011,8 @@ void reada_for_search(struct btrfs_root *root, struct btrfs_path *path,
 		}
 		if (path->reada < 0 && objectid) {
 			btrfs_node_key(node, &disk_key, nr);
-			if (btrfs_disk_key_objectid(&disk_key) != objectid)
+			if (btrfs_stack_disk_key_objectid(&disk_key)
+					!= objectid)
 				break;
 		}
 		search = btrfs_node_blockptr(node, nr);

@@ -951,7 +951,7 @@ int btrfs_list_get_default_subvolume(int fd, u64 *default_id)
 		name = (char *)(di + 1);
 
 		if (!strncmp("default", name, name_len))
-			found = btrfs_disk_key_objectid(&di->location);
+			found = btrfs_stack_disk_key_objectid(&di->location);
 	}
 
 out:

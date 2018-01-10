@@ -1100,7 +1100,7 @@ static void update_super_old(u8 *buffer)
 	chunk = (struct btrfs_chunk *)(super->sys_chunk_array +
 				       sizeof(struct btrfs_disk_key));
 
-	btrfs_set_disk_key_objectid(key, BTRFS_FIRST_CHUNK_TREE_OBJECTID);
+	btrfs_set_stack_disk_key_objectid(key, BTRFS_FIRST_CHUNK_TREE_OBJECTID);
 	btrfs_set_disk_key_type(key, BTRFS_CHUNK_ITEM_KEY);
 	btrfs_set_disk_key_offset(key, 0);
 

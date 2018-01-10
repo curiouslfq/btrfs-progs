@@ -183,7 +183,7 @@ static int del_dir_item(struct btrfs_trans_handle *trans,
 	/* find the inode number of the file */
 	di = btrfs_item_ptr(&path->nodes[0]->leaf, path->slots[0],
 			    struct btrfs_dir_item);
-	file_objectid = btrfs_disk_key_objectid(&di->location);
+	file_objectid = btrfs_stack_disk_key_objectid(&di->location);
 
 	/* delete the directory item */
 	ret = btrfs_del_item(trans, root, path);
@@ -264,7 +264,7 @@ static int lookup_item(struct btrfs_trans_handle *trans, struct btrfs_root
 	if (!ret) {
 		di = btrfs_item_ptr(&path.nodes[0]->leaf, path.slots[0],
 				    struct btrfs_dir_item);
-		objectid = btrfs_disk_key_objectid(&di->location);
+		objectid = btrfs_stack_disk_key_objectid(&di->location);
 	}
 	btrfs_release_path(&path);
 	if (ret) {
