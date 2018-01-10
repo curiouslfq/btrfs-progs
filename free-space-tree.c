@@ -119,10 +119,10 @@ int btrfs_clear_free_space_tree(struct btrfs_fs_info *fs_info)
 	if (IS_ERR(trans))
 		return PTR_ERR(trans);
 
-	features = btrfs_super_compat_ro_flags(fs_info->super_copy);
+	features = btrfs_stack_super_compat_ro_flags(fs_info->super_copy);
 	features &= ~(BTRFS_FEATURE_COMPAT_RO_FREE_SPACE_TREE_VALID |
 		      BTRFS_FEATURE_COMPAT_RO_FREE_SPACE_TREE);
-	btrfs_set_super_compat_ro_flags(fs_info->super_copy, features);
+	btrfs_set_stack_super_compat_ro_flags(fs_info->super_copy, features);
 	fs_info->free_space_root = NULL;
 
 	ret = clear_free_space_tree(trans, free_space_root);

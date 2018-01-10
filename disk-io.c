@@ -770,12 +770,12 @@ int btrfs_check_fs_compatibility(struct btrfs_super_block *sb,
 		btrfs_set_super_incompat_flags(sb, features);
 	}
 
-	features = btrfs_super_compat_ro_flags(sb);
+	features = btrfs_stack_super_compat_ro_flags(sb);
 	if (flags & OPEN_CTREE_WRITES) {
 		if (flags & OPEN_CTREE_INVALIDATE_FST) {
 			/* Clear the FREE_SPACE_TREE_VALID bit on disk... */
 			features &= ~BTRFS_FEATURE_COMPAT_RO_FREE_SPACE_TREE_VALID;
-			btrfs_set_super_compat_ro_flags(sb, features);
+			btrfs_set_stack_super_compat_ro_flags(sb, features);
 			/* ... and ignore the free space tree bit. */
 			features &= ~BTRFS_FEATURE_COMPAT_RO_FREE_SPACE_TREE;
 		}
