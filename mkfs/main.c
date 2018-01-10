@@ -189,7 +189,7 @@ static int __recow_root(struct btrfs_trans_handle *trans,
 	struct extent_buffer *tmp;
 	int ret;
 
-	if (trans->transid != btrfs_root_generation(&root->root_item)) {
+	if (trans->transid != btrfs_stack_root_generation(&root->root_item)) {
 		extent_buffer_get(root->node);
 		ret = __btrfs_cow_block(trans, root, root->node,
 					NULL, 0, &tmp, 0, 0);
@@ -323,7 +323,7 @@ static int create_tree(struct btrfs_trans_handle *trans,
 	memcpy(&root_item, &root->root_item, sizeof(root_item));
 	btrfs_set_root_bytenr(&root_item, tmp->start);
 	btrfs_set_root_level(&root_item, btrfs_header_level(tmp));
-	btrfs_set_root_generation(&root_item, trans->transid);
+	btrfs_set_stack_root_generation(&root_item, trans->transid);
 	free_extent_buffer(tmp);
 
 	location.objectid = objectid;

@@ -494,7 +494,7 @@ static int find_and_setup_root(struct btrfs_root *tree_root,
 	if (ret)
 		return ret;
 
-	generation = btrfs_root_generation(&root->root_item);
+	generation = btrfs_stack_root_generation(&root->root_item);
 	root->node = read_tree_block(fs_info,
 			btrfs_root_bytenr(&root->root_item), generation);
 	if (!extent_buffer_uptodate(root->node))
@@ -606,7 +606,7 @@ out:
 		free(root);
 		return ERR_PTR(ret);
 	}
-	generation = btrfs_root_generation(&root->root_item);
+	generation = btrfs_stack_root_generation(&root->root_item);
 	root->node = read_tree_block(fs_info,
 			btrfs_root_bytenr(&root->root_item), generation);
 	if (!extent_buffer_uptodate(root->node)) {

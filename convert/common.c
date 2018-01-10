@@ -194,7 +194,7 @@ static void insert_temp_root_item(struct extent_buffer *buf,
 	btrfs_set_stack_inode_mode(inode_item, S_IFDIR | 0755);
 	btrfs_set_root_refs(&root_item, 1);
 	btrfs_set_root_used(&root_item, cfg->nodesize);
-	btrfs_set_root_generation(&root_item, 1);
+	btrfs_set_stack_root_generation(&root_item, 1);
 	btrfs_set_root_bytenr(&root_item, bytenr);
 
 	memset(&disk_key, 0, sizeof(disk_key));

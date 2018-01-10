@@ -747,7 +747,7 @@ static u64 find_root_gen(int fd)
 			if (sh.objectid == ino_args.treeid &&
 			    sh.type == BTRFS_ROOT_ITEM_KEY) {
 				max_found = max(max_found,
-						btrfs_root_generation(item));
+					btrfs_stack_root_generation(item));
 			}
 		}
 		if (sk->min_offset < (u64)-1)
@@ -1023,7 +1023,7 @@ static int list_subvol_search(int fd, struct root_lookup *root_lookup)
 				u8 ruuid[BTRFS_UUID_SIZE];
 
 				ri = (struct btrfs_root_item *)(args.buf + off);
-				gen = btrfs_root_generation(ri);
+				gen = btrfs_stack_root_generation(ri);
 				flags = btrfs_root_flags(ri);
 				if(sh.len >
 				   sizeof(struct btrfs_root_item_v0)) {

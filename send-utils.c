@@ -153,7 +153,7 @@ static int btrfs_read_root_item(int mnt_fd, u64 root_id,
 		return ret;
 
 	if (read_len < sizeof(*item) ||
-	    btrfs_root_generation(item) != btrfs_root_generation_v2(item))
+	    btrfs_stack_root_generation(item) != btrfs_root_generation_v2(item))
 		memset(&item->generation_v2, 0,
 			sizeof(*item) - offsetof(struct btrfs_root_item,
 						 generation_v2));

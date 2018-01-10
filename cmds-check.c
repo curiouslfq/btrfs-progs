@@ -13527,7 +13527,7 @@ init:
 	 * same block bytenr here.
 	 */
 	if (old->start == c->start) {
-		btrfs_set_root_generation(&root->root_item,
+		btrfs_set_stack_root_generation(&root->root_item,
 					  trans->transid);
 		root->root_item.level = btrfs_header_level(root->node);
 		ret = btrfs_update_root(trans, root->fs_info->tree_root,
@@ -14384,7 +14384,7 @@ static int maybe_repair_root_item(struct btrfs_path *path,
 
 	if (btrfs_root_bytenr(&ri) != rii->bytenr ||
 	    btrfs_root_level(&ri) != rii->level ||
-	    btrfs_root_generation(&ri) != rii->gen) {
+	    btrfs_stack_root_generation(&ri) != rii->gen) {
 
 		/*
 		 * If we're in repair mode but our caller told us to not update
@@ -14400,21 +14400,23 @@ static int maybe_repair_root_item(struct btrfs_path *path,
 				" new bytenr %llu, new gen %llu, new level %u\n",
 				(read_only_mode ? "" : "fixing "),
 				root_id,
-				btrfs_root_bytenr(&ri), btrfs_root_generation(&ri),
+				btrfs_root_bytenr(&ri),
+				btrfs_stack_root_generation(&ri),
 				btrfs_root_level(&ri),
 				rii->bytenr, rii->gen, rii->level);
 
-		if (btrfs_root_generation(&ri) > rii->gen) {
+		if (btrfs_stack_root_generation(&ri) > rii->gen) {
 			fprintf(stderr,
 				"root %llu has a root item with a more recent gen (%llu) compared to the found root node (%llu)\n",
-				root_id, btrfs_root_generation(&ri), rii->gen);
+				root_id, btrfs_stack_root_generation(&ri),
+				rii->gen);
 			return -EINVAL;
 		}
 
 		if (!read_only_mode) {
 			btrfs_set_root_bytenr(&ri, rii->bytenr);
 			btrfs_set_root_level(&ri, rii->level);
-			btrfs_set_root_generation(&ri, rii->gen);
+			btrfs_set_stack_root_generation(&ri, rii->gen);
 			write_extent_buffer(path->nodes[0], &ri,
 					    offset, sizeof(ri));
 		}
