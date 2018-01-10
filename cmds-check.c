@@ -13974,7 +13974,7 @@ static int zero_log_tree(struct btrfs_root *root)
 		return ret;
 	}
 	btrfs_set_stack_super_log_root(root->fs_info->super_copy, 0);
-	btrfs_set_super_log_root_level(root->fs_info->super_copy, 0);
+	btrfs_set_stack_super_log_root_level(root->fs_info->super_copy, 0);
 	ret = btrfs_commit_transaction(trans, root);
 	return ret;
 }

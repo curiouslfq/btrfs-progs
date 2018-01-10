@@ -1319,9 +1319,9 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 		      BTRFS_MAX_LEVEL);
 		goto error_out;
 	}
-	if (btrfs_super_log_root_level(sb) >= BTRFS_MAX_LEVEL) {
+	if (btrfs_stack_super_log_root_level(sb) >= BTRFS_MAX_LEVEL) {
 		error("log_root level too big: %d >= %d",
-			btrfs_super_log_root_level(sb), BTRFS_MAX_LEVEL);
+			btrfs_stack_super_log_root_level(sb), BTRFS_MAX_LEVEL);
 		goto error_out;
 	}
 
