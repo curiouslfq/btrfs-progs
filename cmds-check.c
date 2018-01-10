@@ -1449,7 +1449,7 @@ static int enter_shared_node(struct btrfs_root *root, u64 bytenr, u32 refs,
 	}
 
 	if (wc->root_level == wc->active_node &&
-	    btrfs_root_refs(&root->root_item) == 0) {
+	    btrfs_stack_root_refs(&root->root_item) == 0) {
 		if (--node->refs == 0) {
 			free_inode_recs_tree(&node->root_cache);
 			free_inode_recs_tree(&node->inode_cache);
@@ -1490,7 +1490,7 @@ static int leave_shared_node(struct btrfs_root *root,
 
 	dest = wc->nodes[wc->active_node];
 	if (wc->active_node < wc->root_level ||
-	    btrfs_root_refs(&root->root_item) > 0) {
+	    btrfs_stack_root_refs(&root->root_item) > 0) {
 		BUG_ON(node->refs <= 1);
 		splice_shared_node(node, dest);
 	} else {
@@ -1922,7 +1922,7 @@ static int process_one_leaf(struct btrfs_root *root, struct extent_buffer *eb,
 	struct shared_node *active_node;
 
 	if (wc->root_level == wc->active_node &&
-	    btrfs_root_refs(&root->root_item) == 0)
+	    btrfs_stack_root_refs(&root->root_item) == 0)
 		return 0;
 
 	active_node = wc->nodes[wc->active_node];
@@ -3846,7 +3846,7 @@ static int check_inode_recs(struct btrfs_root *root,
 	u64 error = 0;
 	u64 root_dirid = btrfs_stack_root_dirid(&root->root_item);
 
-	if (btrfs_root_refs(&root->root_item) == 0) {
+	if (btrfs_stack_root_refs(&root->root_item) == 0) {
 		if (!cache_tree_empty(inode_cache))
 			fprintf(stderr, "warning line %d\n", __LINE__);
 		return 0;
@@ -4453,7 +4453,7 @@ static int check_fs_root(struct btrfs_root *root,
 	if (root->root_key.objectid != BTRFS_TREE_RELOC_OBJECTID) {
 		rec = get_root_rec(root_cache, root->root_key.objectid);
 		BUG_ON(IS_ERR(rec));
-		if (btrfs_root_refs(root_item) > 0)
+		if (btrfs_stack_root_refs(root_item) > 0)
 			rec->found_root_item = 1;
 	}
 
@@ -4489,7 +4489,7 @@ static int check_fs_root(struct btrfs_root *root,
 	if (status != BTRFS_TREE_BLOCK_CLEAN)
 		return -EIO;
 
-	if (btrfs_root_refs(root_item) > 0 ||
+	if (btrfs_stack_root_refs(root_item) > 0 ||
 	    btrfs_stack_disk_key_objectid(&root_item->drop_progress) == 0) {
 		path.nodes[level] = root->node;
 		extent_buffer_get(root->node);
@@ -6442,7 +6442,7 @@ static int check_fs_first_inode(struct btrfs_root *root, unsigned int ext_ref)
 	key.offset = 0;
 
 	/* For root being dropped, we don't need to check first inode */
-	if (btrfs_root_refs(&root->root_item) == 0 &&
+	if (btrfs_stack_root_refs(&root->root_item) == 0 &&
 	    btrfs_stack_disk_key_objectid(&root->root_item.drop_progress) >=
 	    BTRFS_FIRST_FREE_OBJECTID)
 		return 0;
@@ -6588,7 +6588,7 @@ static int check_btrfs_root(struct btrfs_trans_handle *trans,
 	level = btrfs_header_level(root->node);
 	btrfs_init_path(&path);
 
-	if (btrfs_root_refs(root_item) > 0 ||
+	if (btrfs_stack_root_refs(root_item) > 0 ||
 	    btrfs_stack_disk_key_objectid(&root_item->drop_progress) == 0) {
 		path.nodes[level] = root->node;
 		path.slots[level] = 0;

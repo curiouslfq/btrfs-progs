@@ -57,7 +57,7 @@ static int btrfs_create_tree_root(int fd, struct btrfs_mkfs_config *cfg,
 	btrfs_set_stack_inode_nlink(inode_item, 1);
 	btrfs_set_stack_inode_nbytes(inode_item, cfg->nodesize);
 	btrfs_set_stack_inode_mode(inode_item, S_IFDIR | 0755);
-	btrfs_set_root_refs(&root_item, 1);
+	btrfs_set_stack_root_refs(&root_item, 1);
 	btrfs_set_root_used(&root_item, cfg->nodesize);
 	btrfs_set_stack_root_generation(&root_item, 1);
 
