@@ -981,7 +981,7 @@ static int init_btrfs(struct btrfs_mkfs_config *cfg, struct btrfs_root *root,
 				btrfs_super_root_dir(fs_info->super_copy), 0);
 	if (ret)
 		goto err;
-	btrfs_set_root_dirid(&fs_info->fs_root->root_item,
+	btrfs_set_stack_root_dirid(&fs_info->fs_root->root_item,
 			     BTRFS_FIRST_FREE_OBJECTID);
 
 	/* subvol for fs image file */
@@ -1578,7 +1578,7 @@ static int do_rollback(const char *devname)
 	}
 
 	/* Search the image file */
-	root_dir = btrfs_root_dirid(&image_root->root_item);
+	root_dir = btrfs_stack_root_dirid(&image_root->root_item);
 	dir = btrfs_lookup_dir_item(NULL, image_root, &path, root_dir,
 			image_name, strlen(image_name), 0);
 

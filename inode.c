@@ -588,7 +588,7 @@ struct btrfs_root *btrfs_mksubvol(struct btrfs_root *root,
 	struct btrfs_inode_item *inode_item;
 	struct extent_buffer *leaf;
 	struct btrfs_key key;
-	u64 dirid = btrfs_root_dirid(&root->root_item);
+	u64 dirid = btrfs_stack_root_dirid(&root->root_item);
 	u64 index = 2;
 	char buf[BTRFS_NAME_LEN + 1]; /* for snprintf null */
 	int len;

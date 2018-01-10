@@ -477,7 +477,7 @@ static int traverse_directory(struct btrfs_trans_handle *trans,
 
 	btrfs_init_path(&path);
 
-	root_dir_key.objectid = btrfs_root_dirid(&root->root_item);
+	root_dir_key.objectid = btrfs_stack_root_dirid(&root->root_item);
 	root_dir_key.offset = 0;
 	root_dir_key.type = BTRFS_INODE_ITEM_KEY;
 	ret = btrfs_lookup_inode(trans, root, &path, &root_dir_key, 1);

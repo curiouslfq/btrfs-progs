@@ -402,7 +402,7 @@ int btrfs_make_root_dir(struct btrfs_trans_handle *trans,
 	if (ret)
 		goto error;
 
-	btrfs_set_root_dirid(&root->root_item, objectid);
+	btrfs_set_stack_root_dirid(&root->root_item, objectid);
 	ret = 0;
 error:
 	return ret;

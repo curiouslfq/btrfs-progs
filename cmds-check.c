@@ -3178,7 +3178,7 @@ static int repair_inode_backrefs(struct btrfs_root *root,
 				 int delete)
 {
 	struct inode_backref *tmp, *backref;
-	u64 root_dirid = btrfs_root_dirid(&root->root_item);
+	u64 root_dirid = btrfs_stack_root_dirid(&root->root_item);
 	int ret = 0;
 	int repaired = 0;
 
@@ -3844,7 +3844,7 @@ static int check_inode_recs(struct btrfs_root *root,
 	int ret = 0;
 	int err = 0;
 	u64 error = 0;
-	u64 root_dirid = btrfs_root_dirid(&root->root_item);
+	u64 root_dirid = btrfs_stack_root_dirid(&root->root_item);
 
 	if (btrfs_root_refs(&root->root_item) == 0) {
 		if (!cache_tree_empty(inode_cache))
