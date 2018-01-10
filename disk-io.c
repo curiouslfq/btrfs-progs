@@ -859,7 +859,7 @@ int btrfs_setup_all_roots(struct btrfs_fs_info *fs_info, u64 root_tree_bytenr,
 			return -EIO;
 		}
 		backup = fs_info->super_copy->super_roots + index;
-		root_tree_bytenr = btrfs_backup_tree_root(backup);
+		root_tree_bytenr = btrfs_stack_backup_tree_root(backup);
 		generation = btrfs_backup_tree_root_gen(backup);
 	}
 
