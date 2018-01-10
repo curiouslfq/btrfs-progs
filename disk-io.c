@@ -1164,7 +1164,7 @@ static struct btrfs_fs_info *__open_ctree_fd(int fp, const char *path,
 	memcpy(fs_info->fsid, &disk_super->fsid, BTRFS_FSID_SIZE);
 	fs_info->sectorsize = btrfs_stack_super_sectorsize(disk_super);
 	fs_info->nodesize = btrfs_stack_super_nodesize(disk_super);
-	fs_info->stripesize = btrfs_super_stripesize(disk_super);
+	fs_info->stripesize = btrfs_stack_super_stripesize(disk_super);
 
 	ret = btrfs_check_fs_compatibility(fs_info->super_copy, flags);
 	if (ret)
@@ -1369,10 +1369,11 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 		      btrfs_stack_super_bytes_used(sb));
 		goto error_out;
 	}
-	if ((btrfs_super_stripesize(sb) != 4096)
-		&& (btrfs_super_stripesize(sb) !=
+	if ((btrfs_stack_super_stripesize(sb) != 4096)
+		&& (btrfs_stack_super_stripesize(sb) !=
 			btrfs_stack_super_sectorsize(sb))) {
-		error("invalid stripesize %u", btrfs_super_stripesize(sb));
+		error("invalid stripesize %u",
+		      btrfs_stack_super_stripesize(sb));
 		goto error_out;
 	}
 

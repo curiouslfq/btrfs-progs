@@ -1477,7 +1477,7 @@ open_ctree_with_broken_chunk(struct recover_control *rc)
 	memcpy(fs_info->fsid, &disk_super->fsid, BTRFS_FSID_SIZE);
 	fs_info->sectorsize = btrfs_stack_super_sectorsize(disk_super);
 	fs_info->nodesize = btrfs_stack_super_nodesize(disk_super);
-	fs_info->stripesize = btrfs_super_stripesize(disk_super);
+	fs_info->stripesize = btrfs_stack_super_stripesize(disk_super);
 
 	ret = btrfs_check_fs_compatibility(disk_super, OPEN_CTREE_WRITES);
 	if (ret)

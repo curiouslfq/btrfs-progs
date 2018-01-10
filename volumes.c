@@ -938,7 +938,7 @@ int btrfs_alloc_chunk(struct btrfs_trans_handle *trans,
 			return -ENOSPC;
 		min_stripes = 2;
 		stripe_len = find_raid56_stripe_len(num_stripes - 1,
-				    btrfs_super_stripesize(info->super_copy));
+				btrfs_stack_super_stripesize(info->super_copy));
 	}
 	if (type & (BTRFS_BLOCK_GROUP_RAID6)) {
 		num_stripes = btrfs_super_num_devices(info->super_copy);
@@ -948,7 +948,7 @@ int btrfs_alloc_chunk(struct btrfs_trans_handle *trans,
 			return -ENOSPC;
 		min_stripes = 3;
 		stripe_len = find_raid56_stripe_len(num_stripes - 2,
-				    btrfs_super_stripesize(info->super_copy));
+				btrfs_stack_super_stripesize(info->super_copy));
 	}
 
 	/* we don't want a chunk larger than 10% of the FS */
