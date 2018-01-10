@@ -2372,8 +2372,8 @@ int btrfs_truncate_item(struct btrfs_root *root, struct btrfs_path *path,
 			      data_end + size_diff, btrfs_leaf_data(leaf) +
 			      data_end, old_data_start - data_end);
 
-		offset = btrfs_disk_key_offset(&disk_key);
-		btrfs_set_disk_key_offset(&disk_key, offset + size_diff);
+		offset = btrfs_stack_disk_key_offset(&disk_key);
+		btrfs_set_stack_disk_key_offset(&disk_key, offset + size_diff);
 		btrfs_set_item_key(leaf, &disk_key, slot);
 		if (slot == 0)
 			btrfs_fixup_low_keys(root, path, &disk_key, 1);

@@ -851,7 +851,7 @@ static struct qgroup_count *alloc_count(struct btrfs_disk_key *key,
 	struct qgroup_info *item;
 
 	if (c) {
-		c->qgroupid = btrfs_disk_key_offset(key);
+		c->qgroupid = btrfs_stack_disk_key_offset(key);
 		c->key = *key;
 
 		item = &c->diskinfo;

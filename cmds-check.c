@@ -2626,7 +2626,7 @@ static int repair_tree_block_ref(struct btrfs_trans_handle *trans,
 			btrfs_set_stack_disk_key_objectid(&copy_key,
 							  root->objectid);
 			btrfs_set_disk_key_type(&copy_key, 0);
-			btrfs_set_disk_key_offset(&copy_key, 0);
+			btrfs_set_stack_disk_key_offset(&copy_key, 0);
 
 			btrfs_set_tree_block_level(eb, bi, level);
 			btrfs_set_tree_block_key(eb, bi, &copy_key);
@@ -9737,7 +9737,7 @@ static int record_extent(struct btrfs_trans_handle *trans,
 			btrfs_set_stack_disk_key_objectid(&copy_key,
 						    rec->info_objectid);
 			btrfs_set_disk_key_type(&copy_key, 0);
-			btrfs_set_disk_key_offset(&copy_key, 0);
+			btrfs_set_stack_disk_key_offset(&copy_key, 0);
 
 			btrfs_set_tree_block_level(leaf, bi, rec->info_level);
 			btrfs_set_tree_block_key(leaf, bi, &copy_key);
