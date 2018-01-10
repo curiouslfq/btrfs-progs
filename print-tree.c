@@ -1000,7 +1000,7 @@ static void print_block_group_item(struct extent_buffer *eb,
 	bg_flags_to_str(btrfs_block_group_flags(&bg_item), flags_str);
 	printf("\t\tblock group used %llu chunk_objectid %llu flags %s\n",
 		(unsigned long long)btrfs_stack_block_group_used(&bg_item),
-		(unsigned long long)btrfs_block_group_chunk_objectid(&bg_item),
+		(unsigned long long)btrfs_stack_block_group_chunk_objectid(&bg_item),
 		flags_str);
 }
 

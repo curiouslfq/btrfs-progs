@@ -3326,7 +3326,8 @@ btrfs_add_block_group(struct btrfs_fs_info *fs_info, u64 bytes_used, u64 type,
 
 	cache->key.type = BTRFS_BLOCK_GROUP_ITEM_KEY;
 	btrfs_set_stack_block_group_used(&cache->item, bytes_used);
-	btrfs_set_block_group_chunk_objectid(&cache->item, chunk_objectid);
+	btrfs_set_stack_block_group_chunk_objectid(&cache->item,
+						   chunk_objectid);
 	cache->flags = type;
 	btrfs_set_block_group_flags(&cache->item, type);
 
@@ -3436,7 +3437,7 @@ int btrfs_make_block_groups(struct btrfs_trans_handle *trans,
 		cache->key.type = BTRFS_BLOCK_GROUP_ITEM_KEY;
 
 		btrfs_set_stack_block_group_used(&cache->item, 0);
-		btrfs_set_block_group_chunk_objectid(&cache->item,
+		btrfs_set_stack_block_group_chunk_objectid(&cache->item,
 						     chunk_objectid);
 		btrfs_set_block_group_flags(&cache->item, group_type);
 

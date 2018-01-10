@@ -1373,7 +1373,7 @@ static int __insert_block_group(struct btrfs_trans_handle *trans,
 	int ret = 0;
 
 	btrfs_set_stack_block_group_used(&bg_item, used);
-	btrfs_set_block_group_chunk_objectid(&bg_item, used);
+	btrfs_set_stack_block_group_chunk_objectid(&bg_item, used);
 	btrfs_set_block_group_flags(&bg_item, chunk_rec->type_flags);
 	key.objectid = chunk_rec->offset;
 	key.type = BTRFS_BLOCK_GROUP_ITEM_KEY;
