@@ -285,7 +285,7 @@ int btrfs_scan_one_device(int fd, const char *path,
 	if (ret < 0)
 		return -EIO;
 	devid = btrfs_stack_device_id(&disk_super->dev_item);
-	if (btrfs_super_flags(disk_super) & BTRFS_SUPER_FLAG_METADUMP)
+	if (btrfs_stack_super_flags(disk_super) & BTRFS_SUPER_FLAG_METADUMP)
 		*total_devs = 1;
 	else
 		*total_devs = btrfs_super_num_devices(disk_super);

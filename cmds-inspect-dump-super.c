@@ -348,8 +348,8 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	printf("bytenr\t\t\t%llu\n",
 		(unsigned long long)btrfs_stack_super_bytenr(sb));
 	printf("flags\t\t\t0x%llx\n",
-		(unsigned long long)btrfs_super_flags(sb));
-	print_readable_super_flag(btrfs_super_flags(sb));
+		(unsigned long long)btrfs_stack_super_flags(sb));
+	print_readable_super_flag(btrfs_stack_super_flags(sb));
 
 	printf("magic\t\t\t");
 	s = (char *) &sb->magic;

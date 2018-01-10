@@ -1540,7 +1540,7 @@ static int recover_prepare(struct recover_control *rc, char *path)
 	rc->csum_size = btrfs_super_csum_size(sb);
 
 	/* if seed, the result of scanning below will be partial */
-	if (btrfs_super_flags(sb) & BTRFS_SUPER_FLAG_SEEDING) {
+	if (btrfs_stack_super_flags(sb) & BTRFS_SUPER_FLAG_SEEDING) {
 		fprintf(stderr, "this device is seed device\n");
 		ret = -1;
 		goto out_close_fd;

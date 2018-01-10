@@ -1069,7 +1069,7 @@ int btrfs_setup_chunk_tree_and_device_map(struct btrfs_fs_info *fs_info,
 		}
 	}
 
-	if (!(btrfs_super_flags(sb) & BTRFS_SUPER_FLAG_METADUMP)) {
+	if (!(btrfs_stack_super_flags(sb) & BTRFS_SUPER_FLAG_METADUMP)) {
 		ret = btrfs_read_chunk_tree(fs_info);
 		if (ret) {
 			fprintf(stderr, "Couldn't read chunk tree\n");
@@ -1154,7 +1154,8 @@ static struct btrfs_fs_info *__open_ctree_fd(int fp, const char *path,
 		goto out_devices;
 	}
 
-	if (btrfs_super_flags(disk_super) & BTRFS_SUPER_FLAG_CHANGING_FSID &&
+	if (btrfs_stack_super_flags(disk_super) &
+			BTRFS_SUPER_FLAG_CHANGING_FSID &&
 	    !fs_info->ignore_fsid_mismatch) {
 		fprintf(stderr, "ERROR: Filesystem UUID change in progress\n");
 		goto out_devices;
@@ -1582,8 +1583,9 @@ int write_all_supers(struct btrfs_fs_info *fs_info)
 		memcpy(dev_item->uuid, dev->uuid, BTRFS_UUID_SIZE);
 		memcpy(dev_item->fsid, dev->fs_devices->fsid, BTRFS_UUID_SIZE);
 
-		flags = btrfs_super_flags(sb);
-		btrfs_set_super_flags(sb, flags | BTRFS_HEADER_FLAG_WRITTEN);
+		flags = btrfs_stack_super_flags(sb);
+		btrfs_set_stack_super_flags(sb,
+					    flags | BTRFS_HEADER_FLAG_WRITTEN);
 
 		ret = write_dev_supers(fs_info, sb, dev);
 		BUG_ON(ret);

@@ -11297,7 +11297,7 @@ static bool is_super_size_valid(struct btrfs_fs_info *fs_info)
 	 *
 	 * For a btrfs-image restored fs, we don't need to check it anyway.
 	 */
-	if (btrfs_super_flags(fs_info->super_copy) &
+	if (btrfs_stack_super_flags(fs_info->super_copy) &
 	    (BTRFS_SUPER_FLAG_METADUMP | BTRFS_SUPER_FLAG_METADUMP_V2))
 		return true;
 	if (!IS_ALIGNED(super_bytes, fs_info->sectorsize) ||

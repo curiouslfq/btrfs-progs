@@ -45,7 +45,7 @@ static int update_seeding_flag(struct btrfs_root *root, int set_flag)
 	int ret;
 
 	disk_super = root->fs_info->super_copy;
-	super_flags = btrfs_super_flags(disk_super);
+	super_flags = btrfs_stack_super_flags(disk_super);
 	if (set_flag) {
 		if (super_flags & BTRFS_SUPER_FLAG_SEEDING) {
 			if (force)
@@ -67,7 +67,7 @@ static int update_seeding_flag(struct btrfs_root *root, int set_flag)
 
 	trans = btrfs_start_transaction(root, 1);
 	BUG_ON(IS_ERR(trans));
-	btrfs_set_super_flags(disk_super, super_flags);
+	btrfs_set_stack_super_flags(disk_super, super_flags);
 	ret = btrfs_commit_transaction(trans, root);
 
 	return ret;
@@ -237,11 +237,11 @@ out:
 static int change_fsid_prepare(struct btrfs_fs_info *fs_info)
 {
 	struct btrfs_root *tree_root = fs_info->tree_root;
-	u64 flags = btrfs_super_flags(fs_info->super_copy);
+	u64 flags = btrfs_stack_super_flags(fs_info->super_copy);
 	int ret = 0;
 
 	flags |= BTRFS_SUPER_FLAG_CHANGING_FSID;
-	btrfs_set_super_flags(fs_info->super_copy, flags);
+	btrfs_set_stack_super_flags(fs_info->super_copy, flags);
 
 	memcpy(fs_info->super_copy->fsid, fs_info->new_fsid, BTRFS_FSID_SIZE);
 	ret = write_all_supers(fs_info);
@@ -257,10 +257,10 @@ static int change_fsid_prepare(struct btrfs_fs_info *fs_info)
 
 static int change_fsid_done(struct btrfs_fs_info *fs_info)
 {
-	u64 flags = btrfs_super_flags(fs_info->super_copy);
+	u64 flags = btrfs_stack_super_flags(fs_info->super_copy);
 
 	flags &= ~BTRFS_SUPER_FLAG_CHANGING_FSID;
-	btrfs_set_super_flags(fs_info->super_copy, flags);
+	btrfs_set_stack_super_flags(fs_info->super_copy, flags);
 
 	return write_all_supers(fs_info);
 }
@@ -274,7 +274,7 @@ static int check_unfinished_fsid_change(struct btrfs_fs_info *fs_info,
 					uuid_t fsid_ret, uuid_t chunk_id_ret)
 {
 	struct btrfs_root *tree_root = fs_info->tree_root;
-	u64 flags = btrfs_super_flags(fs_info->super_copy);
+	u64 flags = btrfs_stack_super_flags(fs_info->super_copy);
 
 	if (flags & BTRFS_SUPER_FLAG_CHANGING_FSID) {
 		memcpy(fsid_ret, fs_info->super_copy->fsid, BTRFS_FSID_SIZE);
