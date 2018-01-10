@@ -499,7 +499,7 @@ struct subvol_info *subvol_uuid_search2(struct subvol_uuid_search *s,
 	info->ctransid = btrfs_stack_root_ctransid(&root_item);
 	info->otransid = btrfs_stack_root_otransid(&root_item);
 	info->stransid = btrfs_stack_root_stransid(&root_item);
-	info->rtransid = btrfs_root_rtransid(&root_item);
+	info->rtransid = btrfs_stack_root_rtransid(&root_item);
 	if (type == subvol_search_by_path) {
 		info->path = strdup(path);
 		if (!info->path) {
@@ -678,7 +678,8 @@ int subvol_uuid_search_init(int mnt_fd, struct subvol_uuid_search *s)
 							&root_item);
 				si->stransid = btrfs_stack_root_stransid(
 							&root_item);
-				si->rtransid = btrfs_root_rtransid(&root_item);
+				si->rtransid = btrfs_stack_root_rtransid(
+							&root_item);
 				si->path = path;
 				subvol_uuid_search_add(s, si);
 				root_item_valid = 0;

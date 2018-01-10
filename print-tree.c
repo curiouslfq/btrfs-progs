@@ -616,7 +616,7 @@ static void print_root_item(struct extent_buffer *leaf, int slot)
 				btrfs_stack_root_ctransid(&root_item),
 				btrfs_stack_root_otransid(&root_item),
 				btrfs_stack_root_stransid(&root_item),
-				btrfs_root_rtransid(&root_item));
+				btrfs_stack_root_rtransid(&root_item));
 		}
 		if (btrfs_timespec_sec(leaf, btrfs_root_ctime(ri)))
 			print_timespec(leaf, btrfs_root_ctime(ri),
