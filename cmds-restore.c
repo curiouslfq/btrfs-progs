@@ -1264,7 +1264,7 @@ static int do_list_roots(struct btrfs_root *root)
 		printf(" tree ");
 		btrfs_print_key(&disk_key);
 		printf(" %Lu level %d\n", btrfs_stack_root_bytenr(&ri),
-		       btrfs_root_level(&ri));
+		       btrfs_stack_root_level(&ri));
 		path.slots[0]++;
 	}
 	btrfs_release_path(&path);

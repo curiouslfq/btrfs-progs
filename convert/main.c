@@ -854,7 +854,7 @@ static int create_subvol(struct btrfs_trans_handle *trans,
 
 	memcpy(&root_item, &root->root_item, sizeof(root_item));
 	btrfs_set_stack_root_bytenr(&root_item, tmp->start);
-	btrfs_set_root_level(&root_item, btrfs_header_level(tmp));
+	btrfs_set_stack_root_level(&root_item, btrfs_header_level(tmp));
 	btrfs_set_stack_root_generation(&root_item, trans->transid);
 	free_extent_buffer(tmp);
 

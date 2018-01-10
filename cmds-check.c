@@ -11547,7 +11547,7 @@ again:
 			last_snapshot = btrfs_root_last_snapshot(&ri);
 			if (btrfs_stack_disk_key_objectid(&ri.drop_progress)
 					== 0) {
-				level = btrfs_root_level(&ri);
+				level = btrfs_stack_root_level(&ri);
 				ret = add_root_item_to_list(&normal_trees,
 						found_key.objectid,
 						btrfs_stack_root_bytenr(&ri),
@@ -11556,7 +11556,7 @@ again:
 				if (ret < 0)
 					goto out;
 			} else {
-				level = btrfs_root_level(&ri);
+				level = btrfs_stack_root_level(&ri);
 				objectid = found_key.objectid;
 				btrfs_disk_key_to_cpu(&found_key,
 						      &ri.drop_progress);
@@ -14383,7 +14383,7 @@ static int maybe_repair_root_item(struct btrfs_path *path,
 	read_extent_buffer(path->nodes[0], &ri, offset, sizeof(ri));
 
 	if (btrfs_stack_root_bytenr(&ri) != rii->bytenr ||
-	    btrfs_root_level(&ri) != rii->level ||
+	    btrfs_stack_root_level(&ri) != rii->level ||
 	    btrfs_stack_root_generation(&ri) != rii->gen) {
 
 		/*
@@ -14402,7 +14402,7 @@ static int maybe_repair_root_item(struct btrfs_path *path,
 				root_id,
 				btrfs_stack_root_bytenr(&ri),
 				btrfs_stack_root_generation(&ri),
-				btrfs_root_level(&ri),
+				btrfs_stack_root_level(&ri),
 				rii->bytenr, rii->gen, rii->level);
 
 		if (btrfs_stack_root_generation(&ri) > rii->gen) {
@@ -14415,7 +14415,7 @@ static int maybe_repair_root_item(struct btrfs_path *path,
 
 		if (!read_only_mode) {
 			btrfs_set_stack_root_bytenr(&ri, rii->bytenr);
-			btrfs_set_root_level(&ri, rii->level);
+			btrfs_set_stack_root_level(&ri, rii->level);
 			btrfs_set_stack_root_generation(&ri, rii->gen);
 			write_extent_buffer(path->nodes[0], &ri,
 					    offset, sizeof(ri));

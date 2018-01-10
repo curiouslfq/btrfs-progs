@@ -332,7 +332,7 @@ static int __resolve_indirect_ref(struct btrfs_fs_info *fs_info,
 		goto out;
 	}
 
-	root_level = btrfs_root_level(&root->root_item);
+	root_level = btrfs_stack_root_level(&root->root_item);
 
 	if (root_level + 1 == level)
 		goto out;
