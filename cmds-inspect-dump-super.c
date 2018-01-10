@@ -162,7 +162,7 @@ static void print_root_backup(struct btrfs_root_backup *backup)
 			btrfs_stack_backup_chunk_root_level(backup));
 	printf("\t\tbackup_extent_root:\t%llu\tgen: %llu\tlevel: %d\n",
 			btrfs_stack_backup_extent_root(backup),
-			btrfs_backup_extent_root_gen(backup),
+			btrfs_stack_backup_extent_root_gen(backup),
 			btrfs_backup_extent_root_level(backup));
 	printf("\t\tbackup_fs_root:\t\t%llu\tgen: %llu\tlevel: %d\n",
 			btrfs_backup_fs_root(backup),
