@@ -11544,7 +11544,7 @@ again:
 
 			offset = btrfs_item_ptr_offset(leaf, path.slots[0]);
 			read_extent_buffer(leaf, &ri, offset, sizeof(ri));
-			last_snapshot = btrfs_root_last_snapshot(&ri);
+			last_snapshot = btrfs_stack_root_last_snapshot(&ri);
 			if (btrfs_stack_disk_key_objectid(&ri.drop_progress)
 					== 0) {
 				level = btrfs_stack_root_level(&ri);
