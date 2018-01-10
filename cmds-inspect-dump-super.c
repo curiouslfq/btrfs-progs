@@ -378,7 +378,7 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	printf("chunk_root_generation\t%llu\n",
 	       (unsigned long long)btrfs_stack_super_chunk_root_generation(sb));
 	printf("root_level\t\t%llu\n",
-	       (unsigned long long)btrfs_super_root_level(sb));
+	       (unsigned long long)btrfs_stack_super_root_level(sb));
 	printf("chunk_root\t\t%llu\n",
 	       (unsigned long long)btrfs_super_chunk_root(sb));
 	printf("chunk_root_level\t%llu\n",
