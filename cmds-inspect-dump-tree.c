@@ -99,8 +99,8 @@ static void print_old_roots(struct btrfs_super_block *super)
 		(unsigned long long)btrfs_stack_backup_chunk_root(backup));
 
 		printf("\t\tdevice root gen %llu block %llu\n",
-		       (unsigned long long)btrfs_backup_dev_root_gen(backup),
-		       (unsigned long long)btrfs_stack_backup_dev_root(backup));
+		(unsigned long long)btrfs_stack_backup_dev_root_gen(backup),
+		(unsigned long long)btrfs_stack_backup_dev_root(backup));
 
 		printf("\t\tcsum root gen %llu block %llu\n",
 		       (unsigned long long)btrfs_backup_csum_root_gen(backup),
