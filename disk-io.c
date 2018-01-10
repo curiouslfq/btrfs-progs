@@ -1391,12 +1391,12 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 	/*
 	 * Hint to catch really bogus numbers, bitflips or so
 	 */
-	if (btrfs_super_num_devices(sb) > (1UL << 31)) {
+	if (btrfs_stack_super_num_devices(sb) > (1UL << 31)) {
 		warning("suspicious number of devices: %llu",
-			btrfs_super_num_devices(sb));
+			btrfs_stack_super_num_devices(sb));
 	}
 
-	if (btrfs_super_num_devices(sb) == 0) {
+	if (btrfs_stack_super_num_devices(sb) == 0) {
 		error("number of devices is 0");
 		goto error_out;
 	}

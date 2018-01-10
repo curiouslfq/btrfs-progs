@@ -1190,7 +1190,7 @@ static int update_super(struct mdrestore_struct *mdres, u8 *buffer)
 	flags |= BTRFS_SUPER_FLAG_METADUMP_V2;
 	btrfs_set_stack_super_flags(super, flags);
 	btrfs_set_stack_super_sys_array_size(super, new_array_size);
-	btrfs_set_super_num_devices(super, 1);
+	btrfs_set_stack_super_num_devices(super, 1);
 	csum_block(buffer, BTRFS_SUPER_INFO_SIZE);
 
 	return 0;
@@ -2574,7 +2574,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		total_devs = btrfs_super_num_devices(info->super_copy);
+		total_devs = btrfs_stack_super_num_devices(info->super_copy);
 		if (total_devs != dev_cnt) {
 			error("it needs %llu devices but has only %d",
 				total_devs, dev_cnt);

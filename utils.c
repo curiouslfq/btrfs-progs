@@ -232,8 +232,8 @@ int btrfs_add_to_fsid(struct btrfs_trans_handle *trans,
 				device_total_bytes;
 	btrfs_set_stack_super_total_bytes(super, fs_total_bytes);
 
-	num_devs = btrfs_super_num_devices(super) + 1;
-	btrfs_set_super_num_devices(super, num_devs);
+	num_devs = btrfs_stack_super_num_devices(super) + 1;
+	btrfs_set_stack_super_num_devices(super, num_devs);
 
 	memcpy(disk_super, super, sizeof(*disk_super));
 

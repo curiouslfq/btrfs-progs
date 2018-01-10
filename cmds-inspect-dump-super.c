@@ -404,7 +404,7 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	printf("root_dir\t\t%llu\n",
 	       (unsigned long long)btrfs_stack_super_root_dir(sb));
 	printf("num_devices\t\t%llu\n",
-	       (unsigned long long)btrfs_super_num_devices(sb));
+	       (unsigned long long)btrfs_stack_super_num_devices(sb));
 	printf("compat_flags\t\t0x%llx\n",
 	       (unsigned long long)btrfs_super_compat_flags(sb));
 	printf("compat_ro_flags\t\t0x%llx\n",

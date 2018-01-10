@@ -129,7 +129,7 @@ static int device_list_add(const char *path,
 			kfree(device);
 			return -ENOMEM;
 		}
-		device->total_devs = btrfs_super_num_devices(disk_super);
+		device->total_devs = btrfs_stack_super_num_devices(disk_super);
 		device->super_bytes_used =
 			btrfs_stack_super_bytes_used(disk_super);
 		device->total_bytes =
@@ -289,7 +289,7 @@ int btrfs_scan_one_device(int fd, const char *path,
 	if (btrfs_stack_super_flags(disk_super) & BTRFS_SUPER_FLAG_METADUMP)
 		*total_devs = 1;
 	else
-		*total_devs = btrfs_super_num_devices(disk_super);
+		*total_devs = btrfs_stack_super_num_devices(disk_super);
 
 	ret = device_list_add(path, disk_super, devid, fs_devices_ret);
 
@@ -905,7 +905,7 @@ int btrfs_alloc_chunk(struct btrfs_trans_handle *trans,
 	}
 	if (type & BTRFS_BLOCK_GROUP_RAID1) {
 		num_stripes = min_t(u64, 2,
-				  btrfs_super_num_devices(info->super_copy));
+			btrfs_stack_super_num_devices(info->super_copy));
 		if (num_stripes < 2)
 			return -ENOSPC;
 		min_stripes = 2;
@@ -915,13 +915,13 @@ int btrfs_alloc_chunk(struct btrfs_trans_handle *trans,
 		min_stripes = 2;
 	}
 	if (type & (BTRFS_BLOCK_GROUP_RAID0)) {
-		num_stripes = btrfs_super_num_devices(info->super_copy);
+		num_stripes = btrfs_stack_super_num_devices(info->super_copy);
 		if (num_stripes > max_stripes)
 			num_stripes = max_stripes;
 		min_stripes = 2;
 	}
 	if (type & (BTRFS_BLOCK_GROUP_RAID10)) {
-		num_stripes = btrfs_super_num_devices(info->super_copy);
+		num_stripes = btrfs_stack_super_num_devices(info->super_copy);
 		if (num_stripes > max_stripes)
 			num_stripes = max_stripes;
 		if (num_stripes < 4)
@@ -931,7 +931,7 @@ int btrfs_alloc_chunk(struct btrfs_trans_handle *trans,
 		min_stripes = 4;
 	}
 	if (type & (BTRFS_BLOCK_GROUP_RAID5)) {
-		num_stripes = btrfs_super_num_devices(info->super_copy);
+		num_stripes = btrfs_stack_super_num_devices(info->super_copy);
 		if (num_stripes > max_stripes)
 			num_stripes = max_stripes;
 		if (num_stripes < 2)
@@ -941,7 +941,7 @@ int btrfs_alloc_chunk(struct btrfs_trans_handle *trans,
 				btrfs_stack_super_stripesize(info->super_copy));
 	}
 	if (type & (BTRFS_BLOCK_GROUP_RAID6)) {
-		num_stripes = btrfs_super_num_devices(info->super_copy);
+		num_stripes = btrfs_stack_super_num_devices(info->super_copy);
 		if (num_stripes > max_stripes)
 			num_stripes = max_stripes;
 		if (num_stripes < 3)
