@@ -596,7 +596,7 @@ static void print_root_item(struct extent_buffer *leaf, int slot)
 	printf("\t\tlastsnap %llu byte_limit %llu bytes_used %llu flags 0x%llx(%s)\n",
 		(unsigned long long)btrfs_root_last_snapshot(&root_item),
 		(unsigned long long)btrfs_root_limit(&root_item),
-		(unsigned long long)btrfs_root_used(&root_item),
+		(unsigned long long)btrfs_stack_root_used(&root_item),
 		(unsigned long long)btrfs_stack_root_flags(&root_item),
 		flags_str);
 
