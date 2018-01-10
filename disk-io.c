@@ -755,7 +755,7 @@ int btrfs_check_fs_compatibility(struct btrfs_super_block *sb,
 {
 	u64 features;
 
-	features = btrfs_super_incompat_flags(sb) &
+	features = btrfs_stack_super_incompat_flags(sb) &
 		   ~BTRFS_FEATURE_INCOMPAT_SUPP;
 	if (features) {
 		printk("couldn't open because of unsupported "
@@ -764,10 +764,10 @@ int btrfs_check_fs_compatibility(struct btrfs_super_block *sb,
 		return -ENOTSUP;
 	}
 
-	features = btrfs_super_incompat_flags(sb);
+	features = btrfs_stack_super_incompat_flags(sb);
 	if (!(features & BTRFS_FEATURE_INCOMPAT_MIXED_BACKREF)) {
 		features |= BTRFS_FEATURE_INCOMPAT_MIXED_BACKREF;
-		btrfs_set_super_incompat_flags(sb, features);
+		btrfs_set_stack_super_incompat_flags(sb, features);
 	}
 
 	features = btrfs_stack_super_compat_ro_flags(sb);
