@@ -320,7 +320,7 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	u32 csum_size;
 	u16 csum_type;
 
-	csum_type = btrfs_super_csum_type(sb);
+	csum_type = btrfs_stack_super_csum_type(sb);
 	csum_size = BTRFS_CSUM_SIZE;
 	printf("csum_type\t\t%hu (", csum_type);
 	if (csum_type >= ARRAY_SIZE(btrfs_csum_sizes)) {

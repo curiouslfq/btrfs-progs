@@ -2204,7 +2204,7 @@ BTRFS_SETGET_STACK_FUNCS(stack_super_compat_ro_flags, struct btrfs_super_block,
 			 compat_ro_flags, 64);
 BTRFS_SETGET_STACK_FUNCS(stack_super_incompat_flags, struct btrfs_super_block,
 			 incompat_flags, 64);
-BTRFS_SETGET_STACK_FUNCS(super_csum_type, struct btrfs_super_block,
+BTRFS_SETGET_STACK_FUNCS(stack_super_csum_type, struct btrfs_super_block,
 			 csum_type, 16);
 BTRFS_SETGET_STACK_FUNCS(super_cache_generation, struct btrfs_super_block,
 			 cache_generation, 64);
@@ -2214,7 +2214,7 @@ BTRFS_SETGET_STACK_FUNCS(super_magic, struct btrfs_super_block, magic, 64);
 
 static inline int btrfs_super_csum_size(struct btrfs_super_block *s)
 {
-	int t = btrfs_super_csum_type(s);
+	int t = btrfs_stack_super_csum_type(s);
 	BUG_ON(t >= ARRAY_SIZE(btrfs_csum_sizes));
 	return btrfs_csum_sizes[t];
 }
