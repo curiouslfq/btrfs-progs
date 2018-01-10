@@ -1313,9 +1313,10 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 			btrfs_stack_super_root_level(sb), BTRFS_MAX_LEVEL);
 		goto error_out;
 	}
-	if (btrfs_super_chunk_root_level(sb) >= BTRFS_MAX_LEVEL) {
+	if (btrfs_stack_super_chunk_root_level(sb) >= BTRFS_MAX_LEVEL) {
 		error("chunk_root level too big: %d >= %d",
-			btrfs_super_chunk_root_level(sb), BTRFS_MAX_LEVEL);
+		      btrfs_stack_super_chunk_root_level(sb),
+		      BTRFS_MAX_LEVEL);
 		goto error_out;
 	}
 	if (btrfs_super_log_root_level(sb) >= BTRFS_MAX_LEVEL) {
@@ -1613,7 +1614,7 @@ int write_ctree_super(struct btrfs_trans_handle *trans,
 				   btrfs_header_level(tree_root->node));
 	btrfs_set_stack_super_chunk_root(fs_info->super_copy,
 				   chunk_root->node->start);
-	btrfs_set_super_chunk_root_level(fs_info->super_copy,
+	btrfs_set_stack_super_chunk_root_level(fs_info->super_copy,
 					 btrfs_header_level(chunk_root->node));
 	btrfs_set_stack_super_chunk_root_generation(fs_info->super_copy,
 				btrfs_header_generation(chunk_root->node));
