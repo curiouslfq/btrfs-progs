@@ -155,7 +155,7 @@ static void print_root_backup(struct btrfs_root_backup *backup)
 	printf("\t\tbackup_tree_root:\t%llu\tgen: %llu\tlevel: %d\n",
 			btrfs_stack_backup_tree_root(backup),
 			btrfs_stack_backup_tree_root_gen(backup),
-			btrfs_backup_tree_root_level(backup));
+			btrfs_stack_backup_tree_root_level(backup));
 	printf("\t\tbackup_chunk_root:\t%llu\tgen: %llu\tlevel: %d\n",
 			btrfs_backup_chunk_root(backup),
 			btrfs_backup_chunk_root_gen(backup),
