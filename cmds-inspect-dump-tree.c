@@ -108,7 +108,7 @@ static void print_old_roots(struct btrfs_super_block *super)
 
 		printf("\t\tfs root gen %llu block %llu\n",
 		       (unsigned long long)btrfs_backup_fs_root_gen(backup),
-		       (unsigned long long)btrfs_backup_fs_root(backup));
+		       (unsigned long long)btrfs_stack_backup_fs_root(backup));
 
 		printf("\t\t%llu used %llu total %llu devices\n",
 		       (unsigned long long)btrfs_backup_bytes_used(backup),
