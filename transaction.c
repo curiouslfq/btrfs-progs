@@ -62,10 +62,10 @@ static int update_cowonly_root(struct btrfs_trans_handle *trans,
 
 	btrfs_write_dirty_block_groups(trans, root);
 	while(1) {
-		old_root_bytenr = btrfs_root_bytenr(&root->root_item);
+		old_root_bytenr = btrfs_stack_root_bytenr(&root->root_item);
 		if (old_root_bytenr == root->node->start)
 			break;
-		btrfs_set_root_bytenr(&root->root_item,
+		btrfs_set_stack_root_bytenr(&root->root_item,
 				       root->node->start);
 		btrfs_set_stack_root_generation(&root->root_item,
 					  trans->transid);
@@ -157,7 +157,7 @@ int btrfs_commit_transaction(struct btrfs_trans_handle *trans,
 	free_extent_buffer(root->commit_root);
 	root->commit_root = NULL;
 
-	btrfs_set_root_bytenr(&root->root_item, root->node->start);
+	btrfs_set_stack_root_bytenr(&root->root_item, root->node->start);
 	btrfs_set_stack_root_generation(&root->root_item, trans->transid);
 	root->root_item.level = btrfs_header_level(root->node);
 	ret = btrfs_update_root(trans, root->fs_info->tree_root,

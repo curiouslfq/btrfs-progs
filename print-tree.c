@@ -590,7 +590,7 @@ static void print_root_item(struct extent_buffer *leaf, int slot)
 	printf("\t\tgeneration %llu root_dirid %llu bytenr %llu level %hhu refs %u\n",
 		(unsigned long long)btrfs_stack_root_generation(&root_item),
 		(unsigned long long)btrfs_root_dirid(&root_item),
-		(unsigned long long)btrfs_root_bytenr(&root_item),
+		(unsigned long long)btrfs_stack_root_bytenr(&root_item),
 		btrfs_root_level(&root_item),
 		btrfs_root_refs(&root_item));
 	printf("\t\tlastsnap %llu byte_limit %llu bytes_used %llu flags 0x%llx(%s)\n",

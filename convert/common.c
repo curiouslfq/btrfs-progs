@@ -195,7 +195,7 @@ static void insert_temp_root_item(struct extent_buffer *buf,
 	btrfs_set_root_refs(&root_item, 1);
 	btrfs_set_root_used(&root_item, cfg->nodesize);
 	btrfs_set_stack_root_generation(&root_item, 1);
-	btrfs_set_root_bytenr(&root_item, bytenr);
+	btrfs_set_stack_root_bytenr(&root_item, bytenr);
 
 	memset(&disk_key, 0, sizeof(disk_key));
 	btrfs_set_stack_disk_key_type(&disk_key, BTRFS_ROOT_ITEM_KEY);

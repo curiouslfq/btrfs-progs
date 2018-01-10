@@ -70,7 +70,7 @@ static int btrfs_create_tree_root(int fd, struct btrfs_mkfs_config *cfg,
 		    || blk == MKFS_CHUNK_TREE)
 			continue;
 
-		btrfs_set_root_bytenr(&root_item, cfg->blocks[blk]);
+		btrfs_set_stack_root_bytenr(&root_item, cfg->blocks[blk]);
 		btrfs_set_stack_disk_key_objectid(&disk_key,
 			reference_root_table[blk]);
 		btrfs_set_item_key(buf, &disk_key, nritems);

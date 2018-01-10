@@ -2195,7 +2195,7 @@ static int calc_extent_flag_v2(struct btrfs_root *root, struct extent_buffer *eb
 		goto normal;
 
 	/* root node */
-	if (eb->start == btrfs_root_bytenr(ri))
+	if (eb->start == btrfs_stack_root_bytenr(ri))
 		goto normal;
 
 	if (btrfs_header_flag(eb, BTRFS_HEADER_FLAG_RELOC))
@@ -11550,7 +11550,7 @@ again:
 				level = btrfs_root_level(&ri);
 				ret = add_root_item_to_list(&normal_trees,
 						found_key.objectid,
-						btrfs_root_bytenr(&ri),
+						btrfs_stack_root_bytenr(&ri),
 						last_snapshot, level,
 						0, NULL);
 				if (ret < 0)
@@ -11562,7 +11562,7 @@ again:
 						      &ri.drop_progress);
 				ret = add_root_item_to_list(&dropping_trees,
 						objectid,
-						btrfs_root_bytenr(&ri),
+						btrfs_stack_root_bytenr(&ri),
 						last_snapshot, level,
 						ri.drop_level, &found_key);
 				if (ret < 0)
@@ -14382,7 +14382,7 @@ static int maybe_repair_root_item(struct btrfs_path *path,
 	offset = btrfs_item_ptr_offset(path->nodes[0], path->slots[0]);
 	read_extent_buffer(path->nodes[0], &ri, offset, sizeof(ri));
 
-	if (btrfs_root_bytenr(&ri) != rii->bytenr ||
+	if (btrfs_stack_root_bytenr(&ri) != rii->bytenr ||
 	    btrfs_root_level(&ri) != rii->level ||
 	    btrfs_stack_root_generation(&ri) != rii->gen) {
 
@@ -14400,7 +14400,7 @@ static int maybe_repair_root_item(struct btrfs_path *path,
 				" new bytenr %llu, new gen %llu, new level %u\n",
 				(read_only_mode ? "" : "fixing "),
 				root_id,
-				btrfs_root_bytenr(&ri),
+				btrfs_stack_root_bytenr(&ri),
 				btrfs_stack_root_generation(&ri),
 				btrfs_root_level(&ri),
 				rii->bytenr, rii->gen, rii->level);
@@ -14414,7 +14414,7 @@ static int maybe_repair_root_item(struct btrfs_path *path,
 		}
 
 		if (!read_only_mode) {
-			btrfs_set_root_bytenr(&ri, rii->bytenr);
+			btrfs_set_stack_root_bytenr(&ri, rii->bytenr);
 			btrfs_set_root_level(&ri, rii->level);
 			btrfs_set_stack_root_generation(&ri, rii->gen);
 			write_extent_buffer(path->nodes[0], &ri,
