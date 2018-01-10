@@ -121,7 +121,8 @@ int btrfs_update_root(struct btrfs_trans_handle *trans, struct btrfs_root
 	 * Update generation_v2 so at the next mount we know the new root
 	 * fields are valid.
 	 */
-	btrfs_set_root_generation_v2(item, btrfs_stack_root_generation(item));
+	btrfs_set_stack_root_generation_v2(item,
+					   btrfs_stack_root_generation(item));
 
 	write_extent_buffer(l, item, ptr, sizeof(*item));
 	btrfs_mark_buffer_dirty(path->nodes[0]);
@@ -139,7 +140,8 @@ int btrfs_insert_root(struct btrfs_trans_handle *trans, struct btrfs_root
 	/*
 	 * Make sure generation v1 and v2 match. See update_root for details.
 	 */
-	btrfs_set_root_generation_v2(item, btrfs_stack_root_generation(item));
+	btrfs_set_stack_root_generation_v2(item,
+					   btrfs_stack_root_generation(item));
 	ret = btrfs_insert_item(trans, root, key, item, sizeof(*item));
 	return ret;
 }
