@@ -808,7 +808,7 @@ void print_objectid(FILE *stream, u64 objectid, u8 type)
 void btrfs_print_key(struct btrfs_disk_key *disk_key)
 {
 	u64 objectid = btrfs_stack_disk_key_objectid(disk_key);
-	u8 type = btrfs_disk_key_type(disk_key);
+	u8 type = btrfs_stack_disk_key_type(disk_key);
 	u64 offset = btrfs_stack_disk_key_offset(disk_key);
 
 	printf("key (");
@@ -1203,7 +1203,7 @@ void btrfs_print_leaf(struct btrfs_root *root, struct extent_buffer *eb)
 
 		btrfs_item_key(eb, &disk_key, i);
 		objectid = btrfs_stack_disk_key_objectid(&disk_key);
-		type = btrfs_disk_key_type(&disk_key);
+		type = btrfs_stack_disk_key_type(&disk_key);
 		offset = btrfs_stack_disk_key_offset(&disk_key);
 
 		printf("\titem %d ", i);

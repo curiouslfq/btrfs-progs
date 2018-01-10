@@ -198,7 +198,7 @@ static void insert_temp_root_item(struct extent_buffer *buf,
 	btrfs_set_root_bytenr(&root_item, bytenr);
 
 	memset(&disk_key, 0, sizeof(disk_key));
-	btrfs_set_disk_key_type(&disk_key, BTRFS_ROOT_ITEM_KEY);
+	btrfs_set_stack_disk_key_type(&disk_key, BTRFS_ROOT_ITEM_KEY);
 	btrfs_set_stack_disk_key_objectid(&disk_key, objectid);
 	btrfs_set_stack_disk_key_offset(&disk_key, 0);
 
@@ -305,7 +305,7 @@ static int insert_temp_dev_item(int fd, struct extent_buffer *buf,
 	btrfs_set_header_nritems(buf, *slot + 1);
 	(*itemoff) -= sizeof(*dev_item);
 	/* setup device item 1, 0 is for replace case */
-	btrfs_set_disk_key_type(&disk_key, BTRFS_DEV_ITEM_KEY);
+	btrfs_set_stack_disk_key_type(&disk_key, BTRFS_DEV_ITEM_KEY);
 	btrfs_set_stack_disk_key_objectid(&disk_key, BTRFS_DEV_ITEMS_OBJECTID);
 	btrfs_set_stack_disk_key_offset(&disk_key, 1);
 	btrfs_set_item_key(buf, &disk_key, *slot);
@@ -365,7 +365,7 @@ static int insert_temp_chunk_item(int fd, struct extent_buffer *buf,
 
 	btrfs_set_header_nritems(buf, *slot + 1);
 	(*itemoff) -= btrfs_chunk_item_size(1);
-	btrfs_set_disk_key_type(&disk_key, BTRFS_CHUNK_ITEM_KEY);
+	btrfs_set_stack_disk_key_type(&disk_key, BTRFS_CHUNK_ITEM_KEY);
 	btrfs_set_stack_disk_key_objectid(&disk_key,
 					  BTRFS_FIRST_CHUNK_TREE_OBJECTID);
 	btrfs_set_stack_disk_key_offset(&disk_key, start);
@@ -469,7 +469,7 @@ static void insert_temp_dev_extent(struct extent_buffer *buf,
 
 	btrfs_set_header_nritems(buf, *slot + 1);
 	(*itemoff) -= sizeof(*dev_extent);
-	btrfs_set_disk_key_type(&disk_key, BTRFS_DEV_EXTENT_KEY);
+	btrfs_set_stack_disk_key_type(&disk_key, BTRFS_DEV_EXTENT_KEY);
 	btrfs_set_stack_disk_key_objectid(&disk_key, 1);
 	btrfs_set_stack_disk_key_offset(&disk_key, start);
 	btrfs_set_item_key(buf, &disk_key, *slot);
@@ -596,10 +596,11 @@ static int insert_temp_extent_item(int fd, struct extent_buffer *buf,
 	*(itemoff) -= itemsize;
 
 	if (skinny_metadata) {
-		btrfs_set_disk_key_type(&disk_key, BTRFS_METADATA_ITEM_KEY);
+		btrfs_set_stack_disk_key_type(&disk_key,
+					      BTRFS_METADATA_ITEM_KEY);
 		btrfs_set_stack_disk_key_offset(&disk_key, 0);
 	} else {
-		btrfs_set_disk_key_type(&disk_key, BTRFS_EXTENT_ITEM_KEY);
+		btrfs_set_stack_disk_key_type(&disk_key, BTRFS_EXTENT_ITEM_KEY);
 		btrfs_set_stack_disk_key_offset(&disk_key, cfg->nodesize);
 	}
 	btrfs_set_stack_disk_key_objectid(&disk_key, bytenr);
@@ -644,7 +645,7 @@ static int insert_temp_extent_item(int fd, struct extent_buffer *buf,
 		goto out;
 	}
 	if (btrfs_header_nritems(tmp) == 0) {
-		btrfs_set_disk_key_type(&tree_info_key, 0);
+		btrfs_set_stack_disk_key_type(&tree_info_key, 0);
 		btrfs_set_stack_disk_key_objectid(&tree_info_key, 0);
 		btrfs_set_stack_disk_key_offset(&tree_info_key, 0);
 	} else {
@@ -667,7 +668,7 @@ static void insert_temp_block_group(struct extent_buffer *buf,
 
 	btrfs_set_header_nritems(buf, *slot + 1);
 	(*itemoff) -= sizeof(bgi);
-	btrfs_set_disk_key_type(&disk_key, BTRFS_BLOCK_GROUP_ITEM_KEY);
+	btrfs_set_stack_disk_key_type(&disk_key, BTRFS_BLOCK_GROUP_ITEM_KEY);
 	btrfs_set_stack_disk_key_objectid(&disk_key, bytenr);
 	btrfs_set_stack_disk_key_offset(&disk_key, len);
 	btrfs_set_item_key(buf, &disk_key, *slot);

@@ -61,7 +61,7 @@ static int btrfs_create_tree_root(int fd, struct btrfs_mkfs_config *cfg,
 	btrfs_set_root_used(&root_item, cfg->nodesize);
 	btrfs_set_root_generation(&root_item, 1);
 
-	btrfs_set_disk_key_type(&disk_key, BTRFS_ROOT_ITEM_KEY);
+	btrfs_set_stack_disk_key_type(&disk_key, BTRFS_ROOT_ITEM_KEY);
 	btrfs_set_stack_disk_key_offset(&disk_key, 0);
 	itemoff = __BTRFS_LEAF_DATA_SIZE(cfg->nodesize) - sizeof(root_item);
 
@@ -226,11 +226,11 @@ int make_btrfs(int fd, struct btrfs_mkfs_config *cfg)
 		itemoff -= item_size;
 		btrfs_set_stack_disk_key_objectid(&disk_key, cfg->blocks[i]);
 		if (skinny_metadata) {
-			btrfs_set_disk_key_type(&disk_key,
+			btrfs_set_stack_disk_key_type(&disk_key,
 						BTRFS_METADATA_ITEM_KEY);
 			btrfs_set_stack_disk_key_offset(&disk_key, 0);
 		} else {
-			btrfs_set_disk_key_type(&disk_key,
+			btrfs_set_stack_disk_key_type(&disk_key,
 						BTRFS_EXTENT_ITEM_KEY);
 			btrfs_set_stack_disk_key_offset(&disk_key,
 							cfg->nodesize);
@@ -252,7 +252,8 @@ int make_btrfs(int fd, struct btrfs_mkfs_config *cfg)
 		ref_root = reference_root_table[i];
 		btrfs_set_stack_disk_key_objectid(&disk_key, cfg->blocks[i]);
 		btrfs_set_stack_disk_key_offset(&disk_key, ref_root);
-		btrfs_set_disk_key_type(&disk_key, BTRFS_TREE_BLOCK_REF_KEY);
+		btrfs_set_stack_disk_key_type(&disk_key,
+					      BTRFS_TREE_BLOCK_REF_KEY);
 		btrfs_set_item_key(buf, &disk_key, nritems);
 		btrfs_set_item_offset(buf, btrfs_item_nr(nritems),
 				      itemoff);
@@ -279,7 +280,7 @@ int make_btrfs(int fd, struct btrfs_mkfs_config *cfg)
 	/* first device 1 (there is no device 0) */
 	btrfs_set_stack_disk_key_objectid(&disk_key, BTRFS_DEV_ITEMS_OBJECTID);
 	btrfs_set_stack_disk_key_offset(&disk_key, 1);
-	btrfs_set_disk_key_type(&disk_key, BTRFS_DEV_ITEM_KEY);
+	btrfs_set_stack_disk_key_type(&disk_key, BTRFS_DEV_ITEM_KEY);
 	btrfs_set_item_key(buf, &disk_key, nritems);
 	btrfs_set_item_offset(buf, btrfs_item_nr(nritems), itemoff);
 	btrfs_set_item_size(buf, btrfs_item_nr(nritems), item_size);
@@ -312,7 +313,7 @@ int make_btrfs(int fd, struct btrfs_mkfs_config *cfg)
 	btrfs_set_stack_disk_key_objectid(&disk_key,
 					  BTRFS_FIRST_CHUNK_TREE_OBJECTID);
 	btrfs_set_stack_disk_key_offset(&disk_key, 0);
-	btrfs_set_disk_key_type(&disk_key, BTRFS_CHUNK_ITEM_KEY);
+	btrfs_set_stack_disk_key_type(&disk_key, BTRFS_CHUNK_ITEM_KEY);
 	btrfs_set_item_key(buf, &disk_key, nritems);
 	btrfs_set_item_offset(buf, btrfs_item_nr(nritems), itemoff);
 	btrfs_set_item_size(buf, btrfs_item_nr(nritems), item_size);
@@ -366,7 +367,7 @@ int make_btrfs(int fd, struct btrfs_mkfs_config *cfg)
 
 	btrfs_set_stack_disk_key_objectid(&disk_key, 1);
 	btrfs_set_stack_disk_key_offset(&disk_key, 0);
-	btrfs_set_disk_key_type(&disk_key, BTRFS_DEV_EXTENT_KEY);
+	btrfs_set_stack_disk_key_type(&disk_key, BTRFS_DEV_EXTENT_KEY);
 	btrfs_set_item_key(buf, &disk_key, nritems);
 	btrfs_set_item_offset(buf, btrfs_item_nr(nritems), itemoff);
 	btrfs_set_item_size(buf, btrfs_item_nr(nritems),
