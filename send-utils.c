@@ -497,7 +497,7 @@ struct subvol_info *subvol_uuid_search2(struct subvol_uuid_search *s,
 	memcpy(info->received_uuid, root_item.received_uuid, BTRFS_UUID_SIZE);
 	memcpy(info->parent_uuid, root_item.parent_uuid, BTRFS_UUID_SIZE);
 	info->ctransid = btrfs_stack_root_ctransid(&root_item);
-	info->otransid = btrfs_root_otransid(&root_item);
+	info->otransid = btrfs_stack_root_otransid(&root_item);
 	info->stransid = btrfs_root_stransid(&root_item);
 	info->rtransid = btrfs_root_rtransid(&root_item);
 	if (type == subvol_search_by_path) {
@@ -674,7 +674,8 @@ int subvol_uuid_search_init(int mnt_fd, struct subvol_uuid_search *s)
 						BTRFS_UUID_SIZE);
 				si->ctransid = btrfs_stack_root_ctransid(
 							&root_item);
-				si->otransid = btrfs_root_otransid(&root_item);
+				si->otransid = btrfs_stack_root_otransid(
+							&root_item);
 				si->stransid = btrfs_root_stransid(&root_item);
 				si->rtransid = btrfs_root_rtransid(&root_item);
 				si->path = path;

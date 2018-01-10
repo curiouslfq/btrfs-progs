@@ -1028,7 +1028,7 @@ static int list_subvol_search(int fd, struct root_lookup *root_lookup)
 				if(sh.len >
 				   sizeof(struct btrfs_root_item_v0)) {
 					otime = btrfs_stack_timespec_sec(&ri->otime);
-					ogen = btrfs_root_otransid(ri);
+					ogen = btrfs_stack_root_otransid(ri);
 					memcpy(uuid, ri->uuid, BTRFS_UUID_SIZE);
 					memcpy(puuid, ri->parent_uuid, BTRFS_UUID_SIZE);
 					memcpy(ruuid, ri->received_uuid, BTRFS_UUID_SIZE);
