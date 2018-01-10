@@ -2043,7 +2043,7 @@ static int build_chunk_tree(struct mdrestore_struct *mdres,
 
 	pthread_mutex_lock(&mdres->mutex);
 	super = (struct btrfs_super_block *)buffer;
-	chunk_root_bytenr = btrfs_super_chunk_root(super);
+	chunk_root_bytenr = btrfs_stack_super_chunk_root(super);
 	mdres->nodesize = btrfs_super_nodesize(super);
 	memcpy(mdres->fsid, super->fsid, BTRFS_FSID_SIZE);
 	memcpy(mdres->uuid, super->dev_item.uuid,

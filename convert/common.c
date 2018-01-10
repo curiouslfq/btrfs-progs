@@ -119,7 +119,7 @@ static int setup_temp_super(int fd, struct btrfs_mkfs_config *cfg,
 	btrfs_set_super_magic(super, BTRFS_MAGIC_PARTIAL);
 	btrfs_set_stack_super_generation(super, 1);
 	btrfs_set_stack_super_root(super, root_bytenr);
-	btrfs_set_super_chunk_root(super, chunk_bytenr);
+	btrfs_set_stack_super_chunk_root(super, chunk_bytenr);
 	btrfs_set_super_total_bytes(super, cfg->num_bytes);
 	/*
 	 * Temporary filesystem will only have 6 tree roots:
@@ -132,7 +132,7 @@ static int setup_temp_super(int fd, struct btrfs_mkfs_config *cfg,
 	btrfs_set_super_nodesize(super, cfg->nodesize);
 	btrfs_set_super_stripesize(super, cfg->stripesize);
 	btrfs_set_super_csum_type(super, BTRFS_CSUM_TYPE_CRC32);
-	btrfs_set_super_chunk_root(super, chunk_bytenr);
+	btrfs_set_stack_super_chunk_root(super, chunk_bytenr);
 	btrfs_set_super_cache_generation(super, -1);
 	btrfs_set_super_incompat_flags(super, cfg->features);
 	if (cfg->label)

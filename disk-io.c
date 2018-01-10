@@ -1051,7 +1051,7 @@ int btrfs_setup_chunk_tree_and_device_map(struct btrfs_fs_info *fs_info,
 	}
 
 	if (!chunk_root_bytenr)
-		chunk_root_bytenr = btrfs_super_chunk_root(sb);
+		chunk_root_bytenr = btrfs_stack_super_chunk_root(sb);
 	else
 		generation = 0;
 
@@ -1329,9 +1329,9 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 		      btrfs_stack_super_root(sb));
 		goto error_out;
 	}
-	if (!IS_ALIGNED(btrfs_super_chunk_root(sb), 4096)) {
+	if (!IS_ALIGNED(btrfs_stack_super_chunk_root(sb), 4096)) {
 		error("chunk_root block unaligned: %llu",
-			btrfs_super_chunk_root(sb));
+			btrfs_stack_super_chunk_root(sb));
 		goto error_out;
 	}
 	if (!IS_ALIGNED(btrfs_super_log_root(sb), 4096)) {
@@ -1611,7 +1611,7 @@ int write_ctree_super(struct btrfs_trans_handle *trans,
 			     tree_root->node->start);
 	btrfs_set_stack_super_root_level(fs_info->super_copy,
 				   btrfs_header_level(tree_root->node));
-	btrfs_set_super_chunk_root(fs_info->super_copy,
+	btrfs_set_stack_super_chunk_root(fs_info->super_copy,
 				   chunk_root->node->start);
 	btrfs_set_super_chunk_root_level(fs_info->super_copy,
 					 btrfs_header_level(chunk_root->node));
