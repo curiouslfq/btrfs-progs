@@ -118,7 +118,7 @@ static int setup_temp_super(int fd, struct btrfs_mkfs_config *cfg,
 	btrfs_set_super_num_devices(super, 1);
 	btrfs_set_super_magic(super, BTRFS_MAGIC_PARTIAL);
 	btrfs_set_stack_super_generation(super, 1);
-	btrfs_set_super_root(super, root_bytenr);
+	btrfs_set_stack_super_root(super, root_bytenr);
 	btrfs_set_super_chunk_root(super, chunk_bytenr);
 	btrfs_set_super_total_bytes(super, cfg->num_bytes);
 	/*

@@ -850,7 +850,7 @@ int btrfs_setup_all_roots(struct btrfs_fs_info *fs_info, u64 root_tree_bytenr,
 	generation = btrfs_stack_super_generation(sb);
 
 	if (!root_tree_bytenr && !(flags & OPEN_CTREE_BACKUP_ROOT)) {
-		root_tree_bytenr = btrfs_super_root(sb);
+		root_tree_bytenr = btrfs_stack_super_root(sb);
 	} else if (flags & OPEN_CTREE_BACKUP_ROOT) {
 		struct btrfs_root_backup *backup;
 		int index = find_best_backup_root(sb);
@@ -1324,8 +1324,9 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 		goto error_out;
 	}
 
-	if (!IS_ALIGNED(btrfs_super_root(sb), 4096)) {
-		error("tree_root block unaligned: %llu", btrfs_super_root(sb));
+	if (!IS_ALIGNED(btrfs_stack_super_root(sb), 4096)) {
+		error("tree_root block unaligned: %llu",
+		      btrfs_stack_super_root(sb));
 		goto error_out;
 	}
 	if (!IS_ALIGNED(btrfs_super_chunk_root(sb), 4096)) {
@@ -1605,7 +1606,7 @@ int write_ctree_super(struct btrfs_trans_handle *trans,
 
 	btrfs_set_stack_super_generation(fs_info->super_copy,
 				   trans->transid);
-	btrfs_set_super_root(fs_info->super_copy,
+	btrfs_set_stack_super_root(fs_info->super_copy,
 			     tree_root->node->start);
 	btrfs_set_super_root_level(fs_info->super_copy,
 				   btrfs_header_level(tree_root->node));
