@@ -355,7 +355,7 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	s = (char *) &sb->magic;
 	for (i = 0; i < 8; i++)
 		putchar(isprint(s[i]) ? s[i] : '.');
-	if (btrfs_super_magic(sb) == BTRFS_MAGIC)
+	if (btrfs_stack_super_magic(sb) == BTRFS_MAGIC)
 		printf(" [match]\n");
 	else
 		printf(" [DON'T MATCH]\n");
@@ -478,7 +478,7 @@ static int load_and_dump_sb(char *filename, int fd, u64 sb_bytenr, int full,
 	}
 	printf("superblock: bytenr=%llu, device=%s\n", sb_bytenr, filename);
 	printf("---------------------------------------------------------\n");
-	if (btrfs_super_magic(sb) != BTRFS_MAGIC && !force) {
+	if (btrfs_stack_super_magic(sb) != BTRFS_MAGIC && !force) {
 		error("bad magic on superblock on %s at %llu",
 				filename, (unsigned long long)sb_bytenr);
 	} else {

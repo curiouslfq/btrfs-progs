@@ -1283,8 +1283,8 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 	u16 csum_type;
 	int csum_size;
 
-	if (btrfs_super_magic(sb) != BTRFS_MAGIC) {
-		if (btrfs_super_magic(sb) == BTRFS_MAGIC_PARTIAL) {
+	if (btrfs_stack_super_magic(sb) != BTRFS_MAGIC) {
+		if (btrfs_stack_super_magic(sb) == BTRFS_MAGIC_PARTIAL) {
 			if (!(sbflags & SBREAD_PARTIAL)) {
 				error("superblock magic doesn't match");
 				return -EIO;
@@ -1477,7 +1477,7 @@ int btrfs_read_dev_super(int fd, struct btrfs_super_block *sb, u64 sb_bytenr,
 		if (btrfs_stack_super_bytenr(buf) != bytenr)
 			continue;
 		/* if magic is NULL, the device was removed */
-		if (btrfs_super_magic(buf) == 0 && i == 0)
+		if (btrfs_stack_super_magic(buf) == 0 && i == 0)
 			break;
 		if (check_super(buf, sbflags))
 			continue;
@@ -1657,7 +1657,7 @@ int close_ctree_fs_info(struct btrfs_fs_info *fs_info)
 	}
 
 	if (fs_info->finalize_on_close) {
-		btrfs_set_super_magic(fs_info->super_copy, BTRFS_MAGIC);
+		btrfs_set_stack_super_magic(fs_info->super_copy, BTRFS_MAGIC);
 		root->fs_info->finalize_on_close = 0;
 		ret = write_all_supers(fs_info);
 		if (ret)
