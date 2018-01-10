@@ -1025,8 +1025,8 @@ static int migrate_super_block(int fd, u64 old_bytenr)
 		goto fail;
 
 	super = (struct btrfs_super_block *)buf->data;
-	BUG_ON(btrfs_super_bytenr(super) != old_bytenr);
-	btrfs_set_super_bytenr(super, BTRFS_SUPER_INFO_OFFSET);
+	BUG_ON(btrfs_stack_super_bytenr(super) != old_bytenr);
+	btrfs_set_stack_super_bytenr(super, BTRFS_SUPER_INFO_OFFSET);
 
 	csum_tree_block_size(buf, BTRFS_CRC32_SIZE, 0);
 	ret = pwrite(fd, buf->data, BTRFS_SUPER_INFO_SIZE,

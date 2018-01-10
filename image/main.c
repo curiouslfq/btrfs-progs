@@ -1352,7 +1352,7 @@ static void write_backup_supers(int fd, u8 *buf)
 		bytenr = btrfs_sb_offset(i);
 		if (bytenr + BTRFS_SUPER_INFO_SIZE > size)
 			break;
-		btrfs_set_super_bytenr(super, bytenr);
+		btrfs_set_stack_super_bytenr(super, bytenr);
 		csum_block(buf, BTRFS_SUPER_INFO_SIZE);
 		ret = pwrite64(fd, buf, BTRFS_SUPER_INFO_SIZE, bytenr);
 		if (ret < BTRFS_SUPER_INFO_SIZE) {

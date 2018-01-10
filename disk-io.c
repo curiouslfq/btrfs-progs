@@ -1442,7 +1442,7 @@ int btrfs_read_dev_super(int fd, struct btrfs_super_block *sb, u64 sb_bytenr,
 		if (ret < BTRFS_SUPER_INFO_SIZE)
 			return -ENOENT;
 
-		if (btrfs_super_bytenr(buf) != sb_bytenr)
+		if (btrfs_stack_super_bytenr(buf) != sb_bytenr)
 			return -EIO;
 
 		ret = check_super(buf, sbflags);
@@ -1465,7 +1465,7 @@ int btrfs_read_dev_super(int fd, struct btrfs_super_block *sb, u64 sb_bytenr,
 		if (ret < BTRFS_SUPER_INFO_SIZE)
 			break;
 
-		if (btrfs_super_bytenr(buf) != bytenr )
+		if (btrfs_stack_super_bytenr(buf) != bytenr)
 			continue;
 		/* if magic is NULL, the device was removed */
 		if (btrfs_super_magic(buf) == 0 && i == 0)
@@ -1503,7 +1503,7 @@ static int write_dev_supers(struct btrfs_fs_info *fs_info,
 	int i, ret;
 
 	if (fs_info->super_bytenr != BTRFS_SUPER_INFO_OFFSET) {
-		btrfs_set_super_bytenr(sb, fs_info->super_bytenr);
+		btrfs_set_stack_super_bytenr(sb, fs_info->super_bytenr);
 		crc = ~(u32)0;
 		crc = btrfs_csum_data((char *)sb + BTRFS_CSUM_SIZE, crc,
 				      BTRFS_SUPER_INFO_SIZE - BTRFS_CSUM_SIZE);
@@ -1526,7 +1526,7 @@ static int write_dev_supers(struct btrfs_fs_info *fs_info,
 		if (bytenr + BTRFS_SUPER_INFO_SIZE > device->total_bytes)
 			break;
 
-		btrfs_set_super_bytenr(sb, bytenr);
+		btrfs_set_stack_super_bytenr(sb, bytenr);
 
 		crc = ~(u32)0;
 		crc = btrfs_csum_data((char *)sb + BTRFS_CSUM_SIZE, crc,
