@@ -63,7 +63,7 @@ static int create_metadata_block_groups(struct btrfs_root *root, int mixed,
 
 	trans = btrfs_start_transaction(root, 1);
 	BUG_ON(IS_ERR(trans));
-	bytes_used = btrfs_super_bytes_used(fs_info->super_copy);
+	bytes_used = btrfs_stack_super_bytes_used(fs_info->super_copy);
 
 	root->fs_info->system_allocs = 1;
 	ret = btrfs_make_block_group(trans, fs_info, bytes_used,

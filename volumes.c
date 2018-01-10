@@ -130,7 +130,8 @@ static int device_list_add(const char *path,
 			return -ENOMEM;
 		}
 		device->total_devs = btrfs_super_num_devices(disk_super);
-		device->super_bytes_used = btrfs_super_bytes_used(disk_super);
+		device->super_bytes_used =
+			btrfs_stack_super_bytes_used(disk_super);
 		device->total_bytes =
 			btrfs_stack_device_total_bytes(&disk_super->dev_item);
 		device->bytes_used =

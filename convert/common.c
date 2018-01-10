@@ -126,7 +126,7 @@ static int setup_temp_super(int fd, struct btrfs_mkfs_config *cfg,
 	 * chunk tree, root tree, extent_tree, device tree, fs tree
 	 * and csum tree.
 	 */
-	btrfs_set_super_bytes_used(super, 6 * cfg->nodesize);
+	btrfs_set_stack_super_bytes_used(super, 6 * cfg->nodesize);
 	btrfs_set_super_sectorsize(super, cfg->sectorsize);
 	super->__unused_leafsize = cpu_to_le32(cfg->nodesize);
 	btrfs_set_super_nodesize(super, cfg->nodesize);

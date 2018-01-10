@@ -1362,8 +1362,9 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 		error("invalid total_bytes 0");
 		goto error_out;
 	}
-	if (btrfs_super_bytes_used(sb) < 6 * btrfs_super_nodesize(sb)) {
-		error("invalid bytes_used %llu", btrfs_super_bytes_used(sb));
+	if (btrfs_stack_super_bytes_used(sb) < 6 * btrfs_super_nodesize(sb)) {
+		error("invalid bytes_used %llu",
+		      btrfs_stack_super_bytes_used(sb));
 		goto error_out;
 	}
 	if ((btrfs_super_stripesize(sb) != 4096)

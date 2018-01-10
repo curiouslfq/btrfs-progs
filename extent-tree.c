@@ -1934,12 +1934,12 @@ static int update_block_group(struct btrfs_root *root,
 	u64 end;
 
 	/* block accounting for super block */
-	old_val = btrfs_super_bytes_used(info->super_copy);
+	old_val = btrfs_stack_super_bytes_used(info->super_copy);
 	if (alloc)
 		old_val += num_bytes;
 	else
 		old_val -= num_bytes;
-	btrfs_set_super_bytes_used(info->super_copy, old_val);
+	btrfs_set_stack_super_bytes_used(info->super_copy, old_val);
 
 	/* block accounting for root item */
 	old_val = btrfs_stack_root_used(&root->root_item);
@@ -3909,7 +3909,7 @@ int btrfs_fix_block_accounting(struct btrfs_trans_handle *trans,
 		}
 		path.slots[0]++;
 	}
-	btrfs_set_super_bytes_used(root->fs_info->super_copy, bytes_used);
+	btrfs_set_stack_super_bytes_used(root->fs_info->super_copy, bytes_used);
 	ret = 0;
 out:
 	btrfs_release_path(&path);

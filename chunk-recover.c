@@ -1069,12 +1069,13 @@ again:
 		del_nr++;
 		if (key.type == BTRFS_EXTENT_ITEM_KEY ||
 		    key.type == BTRFS_METADATA_ITEM_KEY) {
-			old_val = btrfs_super_bytes_used(fs_info->super_copy);
+			old_val = btrfs_stack_super_bytes_used(
+					fs_info->super_copy);
 			if (key.type == BTRFS_METADATA_ITEM_KEY)
 				old_val += fs_info->nodesize;
 			else
 				old_val += key.offset;
-			btrfs_set_super_bytes_used(fs_info->super_copy,
+			btrfs_set_stack_super_bytes_used(fs_info->super_copy,
 						   old_val);
 		}
 	}
