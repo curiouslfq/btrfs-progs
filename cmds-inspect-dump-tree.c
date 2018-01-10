@@ -87,7 +87,7 @@ static void print_old_roots(struct btrfs_super_block *super)
 		backup = super->super_roots + i;
 		printf("btrfs root backup slot %d\n", i);
 		printf("\ttree root gen %llu block %llu\n",
-		(unsigned long long)btrfs_backup_tree_root_gen(backup),
+		(unsigned long long)btrfs_stack_backup_tree_root_gen(backup),
 		(unsigned long long)btrfs_stack_backup_tree_root(backup));
 
 		printf("\t\textent root gen %llu block %llu\n",

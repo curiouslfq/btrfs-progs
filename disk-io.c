@@ -800,10 +800,10 @@ static int find_best_backup_root(struct btrfs_super_block *super)
 
 	for (i = 0; i < BTRFS_NUM_BACKUP_ROOTS; i++) {
 		backup = super->super_roots + i;
-		if (btrfs_backup_tree_root_gen(backup) != orig_gen &&
-		    btrfs_backup_tree_root_gen(backup) > gen) {
+		if (btrfs_stack_backup_tree_root_gen(backup) != orig_gen &&
+		    btrfs_stack_backup_tree_root_gen(backup) > gen) {
 			best_index = i;
-			gen = btrfs_backup_tree_root_gen(backup);
+			gen = btrfs_stack_backup_tree_root_gen(backup);
 		}
 	}
 	return best_index;
@@ -860,7 +860,7 @@ int btrfs_setup_all_roots(struct btrfs_fs_info *fs_info, u64 root_tree_bytenr,
 		}
 		backup = fs_info->super_copy->super_roots + index;
 		root_tree_bytenr = btrfs_stack_backup_tree_root(backup);
-		generation = btrfs_backup_tree_root_gen(backup);
+		generation = btrfs_stack_backup_tree_root_gen(backup);
 	}
 
 	root->node = read_tree_block(fs_info, root_tree_bytenr, generation);
