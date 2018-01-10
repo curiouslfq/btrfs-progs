@@ -613,7 +613,7 @@ static void print_root_item(struct extent_buffer *leaf, int slot)
 		}
 		if (root_item.ctransid) {
 			printf("\t\tctransid %llu otransid %llu stransid %llu rtransid %llu\n",
-				btrfs_root_ctransid(&root_item),
+				btrfs_stack_root_ctransid(&root_item),
 				btrfs_root_otransid(&root_item),
 				btrfs_root_stransid(&root_item),
 				btrfs_root_rtransid(&root_item));
