@@ -261,7 +261,7 @@ list_fragments(int fd, u64 flags, char *dir)
 
 				bg = (struct btrfs_block_group_item *)
 						(args.buf + off);
-				bgflags = btrfs_block_group_flags(bg);
+				bgflags = btrfs_stack_block_group_flags(bg);
 				bgused = btrfs_stack_block_group_used(bg);
 
 				printf("found block group %lld len %lld "

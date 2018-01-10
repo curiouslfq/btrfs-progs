@@ -12962,7 +12962,7 @@ static int check_block_group_item(struct btrfs_fs_info *fs_info,
 	bi = btrfs_item_ptr(eb, slot, struct btrfs_block_group_item);
 	read_extent_buffer(eb, &bg_item, (unsigned long)bi, sizeof(bg_item));
 	used = btrfs_stack_block_group_used(&bg_item);
-	bg_flags = btrfs_block_group_flags(&bg_item);
+	bg_flags = btrfs_stack_block_group_flags(&bg_item);
 
 	chunk_key.objectid = BTRFS_FIRST_CHUNK_TREE_OBJECTID;
 	chunk_key.type = BTRFS_CHUNK_ITEM_KEY;
@@ -13164,11 +13164,11 @@ static int check_chunk_item(struct btrfs_fs_info *fs_info,
 				    struct btrfs_block_group_item);
 		read_extent_buffer(leaf, &bg_item, (unsigned long)bi,
 				   sizeof(bg_item));
-		if (btrfs_block_group_flags(&bg_item) != type) {
+		if (btrfs_stack_block_group_flags(&bg_item) != type) {
 			error(
 "chunk[%llu %llu) related block group item flags mismatch, wanted: %llu, have: %llu",
 				chunk_key.offset, chunk_end, type,
-				btrfs_block_group_flags(&bg_item));
+				btrfs_stack_block_group_flags(&bg_item));
 			err |= REFERENCER_MISSING;
 		}
 	}

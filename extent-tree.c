@@ -3274,7 +3274,7 @@ int btrfs_read_block_groups(struct btrfs_root *root)
 			continue;
 		}
 
-		cache->flags = btrfs_block_group_flags(&cache->item);
+		cache->flags = btrfs_stack_block_group_flags(&cache->item);
 		bit = 0;
 		if (cache->flags & BTRFS_BLOCK_GROUP_DATA) {
 			bit = BLOCK_GROUP_DATA;
@@ -3329,7 +3329,7 @@ btrfs_add_block_group(struct btrfs_fs_info *fs_info, u64 bytes_used, u64 type,
 	btrfs_set_stack_block_group_chunk_objectid(&cache->item,
 						   chunk_objectid);
 	cache->flags = type;
-	btrfs_set_block_group_flags(&cache->item, type);
+	btrfs_set_stack_block_group_flags(&cache->item, type);
 
 	account_super_bytes(fs_info, cache);
 	ret = update_space_info(fs_info, cache->flags, size, bytes_used,
@@ -3439,7 +3439,7 @@ int btrfs_make_block_groups(struct btrfs_trans_handle *trans,
 		btrfs_set_stack_block_group_used(&cache->item, 0);
 		btrfs_set_stack_block_group_chunk_objectid(&cache->item,
 						     chunk_objectid);
-		btrfs_set_block_group_flags(&cache->item, group_type);
+		btrfs_set_stack_block_group_flags(&cache->item, group_type);
 
 		cache->flags = group_type;
 

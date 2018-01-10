@@ -673,7 +673,7 @@ static void insert_temp_block_group(struct extent_buffer *buf,
 	btrfs_set_item_offset(buf, btrfs_item_nr(*slot), *itemoff);
 	btrfs_set_item_size(buf, btrfs_item_nr(*slot), sizeof(bgi));
 
-	btrfs_set_block_group_flags(&bgi, flag);
+	btrfs_set_stack_block_group_flags(&bgi, flag);
 	btrfs_set_stack_block_group_used(&bgi, used);
 	btrfs_set_stack_block_group_chunk_objectid(&bgi,
 			BTRFS_FIRST_CHUNK_TREE_OBJECTID);
