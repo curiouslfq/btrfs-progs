@@ -190,11 +190,11 @@ static int cmd_rescue_zero_log(int argc, char **argv)
 	sb = root->fs_info->super_copy;
 	printf("Clearing log on %s, previous log_root %llu, level %u\n",
 			devname,
-			(unsigned long long)btrfs_super_log_root(sb),
+			(unsigned long long)btrfs_stack_super_log_root(sb),
 			(unsigned)btrfs_super_log_root_level(sb));
 	trans = btrfs_start_transaction(root, 1);
 	BUG_ON(IS_ERR(trans));
-	btrfs_set_super_log_root(sb, 0);
+	btrfs_set_stack_super_log_root(sb, 0);
 	btrfs_set_super_log_root_level(sb, 0);
 	btrfs_commit_transaction(trans, root);
 	close_ctree(root);

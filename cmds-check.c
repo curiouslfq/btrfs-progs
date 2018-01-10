@@ -13973,7 +13973,7 @@ static int zero_log_tree(struct btrfs_root *root)
 		ret = PTR_ERR(trans);
 		return ret;
 	}
-	btrfs_set_super_log_root(root->fs_info->super_copy, 0);
+	btrfs_set_stack_super_log_root(root->fs_info->super_copy, 0);
 	btrfs_set_super_log_root_level(root->fs_info->super_copy, 0);
 	ret = btrfs_commit_transaction(trans, root);
 	return ret;
@@ -14874,7 +14874,7 @@ int cmd_check(int argc, char **argv)
 	 * repair mode will force us to commit transaction which
 	 * will make us fail to load log tree when mounting.
 	 */
-	if (repair && btrfs_super_log_root(info->super_copy)) {
+	if (repair && btrfs_stack_super_log_root(info->super_copy)) {
 		ret = ask_user("repair mode will force to clear out log tree, are you sure?");
 		if (!ret) {
 			ret = 1;

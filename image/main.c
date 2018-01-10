@@ -819,7 +819,7 @@ static int copy_tree_blocks(struct btrfs_root *root, struct extent_buffer *eb,
 static int copy_log_trees(struct btrfs_root *root,
 			  struct metadump_struct *metadump)
 {
-	u64 blocknr = btrfs_super_log_root(root->fs_info->super_copy);
+	u64 blocknr = btrfs_stack_super_log_root(root->fs_info->super_copy);
 
 	if (blocknr == 0)
 		return 0;

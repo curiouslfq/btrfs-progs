@@ -507,7 +507,7 @@ static int find_and_setup_log_root(struct btrfs_root *tree_root,
 			       struct btrfs_fs_info *fs_info,
 			       struct btrfs_super_block *disk_super)
 {
-	u64 blocknr = btrfs_super_log_root(disk_super);
+	u64 blocknr = btrfs_stack_super_log_root(disk_super);
 	struct btrfs_root *log_root = malloc(sizeof(struct btrfs_root));
 
 	if (!log_root)
@@ -1335,9 +1335,9 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 			btrfs_stack_super_chunk_root(sb));
 		goto error_out;
 	}
-	if (!IS_ALIGNED(btrfs_super_log_root(sb), 4096)) {
+	if (!IS_ALIGNED(btrfs_stack_super_log_root(sb), 4096)) {
 		error("log_root block unaligned: %llu",
-			btrfs_super_log_root(sb));
+			btrfs_stack_super_log_root(sb));
 		goto error_out;
 	}
 	if (btrfs_super_nodesize(sb) < 4096) {
