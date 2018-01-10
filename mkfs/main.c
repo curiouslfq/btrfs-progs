@@ -1241,7 +1241,8 @@ raid_groups:
 		printf("Node size:          %u\n", nodesize);
 		printf("Sector size:        %u\n", sectorsize);
 		printf("Filesystem size:    %s\n",
-			pretty_size(btrfs_super_total_bytes(fs_info->super_copy)));
+			pretty_size(btrfs_stack_super_total_bytes(
+					fs_info->super_copy)));
 		printf("Block group profiles:\n");
 		if (allocation.data)
 			printf("  Data:             %-8s %16s\n",

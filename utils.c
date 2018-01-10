@@ -228,8 +228,9 @@ int btrfs_add_to_fsid(struct btrfs_trans_handle *trans,
 	if (ret)
 		goto out;
 
-	fs_total_bytes = btrfs_super_total_bytes(super) + device_total_bytes;
-	btrfs_set_super_total_bytes(super, fs_total_bytes);
+	fs_total_bytes = btrfs_stack_super_total_bytes(super) +
+				device_total_bytes;
+	btrfs_set_stack_super_total_bytes(super, fs_total_bytes);
 
 	num_devs = btrfs_super_num_devices(super) + 1;
 	btrfs_set_super_num_devices(super, num_devs);

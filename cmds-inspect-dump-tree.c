@@ -575,7 +575,7 @@ no_node:
 		print_old_roots(info->super_copy);
 
 	printf("total bytes %llu\n",
-	       (unsigned long long)btrfs_super_total_bytes(info->super_copy));
+	(unsigned long long)btrfs_stack_super_total_bytes(info->super_copy));
 	printf("bytes used %llu\n",
 	       (unsigned long long)btrfs_super_bytes_used(info->super_copy));
 	uuidbuf[BTRFS_UUID_UNPARSED_SIZE - 1] = '\0';

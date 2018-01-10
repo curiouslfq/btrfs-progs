@@ -1358,7 +1358,7 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 		error("sectorsize unaligned: %u", btrfs_super_sectorsize(sb));
 		goto error_out;
 	}
-	if (btrfs_super_total_bytes(sb) == 0) {
+	if (btrfs_stack_super_total_bytes(sb) == 0) {
 		error("invalid total_bytes 0");
 		goto error_out;
 	}

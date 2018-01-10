@@ -390,7 +390,7 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	printf("log_root_level\t\t%llu\n",
 	       (unsigned long long)btrfs_stack_super_log_root_level(sb));
 	printf("total_bytes\t\t%llu\n",
-	       (unsigned long long)btrfs_super_total_bytes(sb));
+	       (unsigned long long)btrfs_stack_super_total_bytes(sb));
 	printf("bytes_used\t\t%llu\n",
 	       (unsigned long long)btrfs_super_bytes_used(sb));
 	printf("sectorsize\t\t%llu\n",

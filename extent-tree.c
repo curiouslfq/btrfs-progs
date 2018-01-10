@@ -3399,7 +3399,7 @@ int btrfs_make_block_groups(struct btrfs_trans_handle *trans,
 
 	block_group_cache = &fs_info->block_group_cache;
 	chunk_objectid = BTRFS_FIRST_CHUNK_TREE_OBJECTID;
-	total_bytes = btrfs_super_total_bytes(fs_info->super_copy);
+	total_bytes = btrfs_stack_super_total_bytes(fs_info->super_copy);
 	group_align = 64 * fs_info->sectorsize;
 
 	cur_start = 0;

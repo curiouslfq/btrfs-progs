@@ -951,7 +951,8 @@ int btrfs_alloc_chunk(struct btrfs_trans_handle *trans,
 	}
 
 	/* we don't want a chunk larger than 10% of the FS */
-	percent_max = div_factor(btrfs_super_total_bytes(info->super_copy), 1);
+	percent_max = div_factor(btrfs_stack_super_total_bytes(
+					info->super_copy), 1);
 	max_chunk_size = min(percent_max, max_chunk_size);
 
 again:
@@ -2438,7 +2439,7 @@ int btrfs_fix_super_size(struct btrfs_fs_info *fs_info)
 	struct btrfs_device *device;
 	struct list_head *dev_list = &fs_info->fs_devices->devices;
 	u64 total_bytes = 0;
-	u64 old_bytes = btrfs_super_total_bytes(fs_info->super_copy);
+	u64 old_bytes = btrfs_stack_super_total_bytes(fs_info->super_copy);
 	int ret;
 
 	list_for_each_entry(device, dev_list, dev_list) {
@@ -2458,7 +2459,7 @@ int btrfs_fix_super_size(struct btrfs_fs_info *fs_info)
 	if (total_bytes == old_bytes)
 		return 0;
 
-	btrfs_set_super_total_bytes(fs_info->super_copy, total_bytes);
+	btrfs_set_stack_super_total_bytes(fs_info->super_copy, total_bytes);
 
 	/* Commit transaction to update all super blocks */
 	trans = btrfs_start_transaction(fs_info->tree_root, 1);

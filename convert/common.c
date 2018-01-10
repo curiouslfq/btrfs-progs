@@ -120,7 +120,7 @@ static int setup_temp_super(int fd, struct btrfs_mkfs_config *cfg,
 	btrfs_set_stack_super_generation(super, 1);
 	btrfs_set_stack_super_root(super, root_bytenr);
 	btrfs_set_stack_super_chunk_root(super, chunk_bytenr);
-	btrfs_set_super_total_bytes(super, cfg->num_bytes);
+	btrfs_set_stack_super_total_bytes(super, cfg->num_bytes);
 	/*
 	 * Temporary filesystem will only have 6 tree roots:
 	 * chunk tree, root tree, extent_tree, device tree, fs tree

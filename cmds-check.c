@@ -11277,7 +11277,7 @@ static bool is_super_size_valid(struct btrfs_fs_info *fs_info)
 	struct btrfs_device *dev;
 	struct list_head *dev_list = &fs_info->fs_devices->devices;
 	u64 total_bytes = 0;
-	u64 super_bytes = btrfs_super_total_bytes(fs_info->super_copy);
+	u64 super_bytes = btrfs_stack_super_total_bytes(fs_info->super_copy);
 
 	list_for_each_entry(dev, dev_list, dev_list)
 		total_bytes += dev->total_bytes;

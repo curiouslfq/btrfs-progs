@@ -875,7 +875,7 @@ static int set_device_size(struct btrfs_fs_info *fs_info,
 	 * Update super->total_bytes, since it's only used for --rootdir,
 	 * there is only one device, just use the @new_size.
 	 */
-	btrfs_set_super_total_bytes(fs_info->super_copy, new_size);
+	btrfs_set_stack_super_total_bytes(fs_info->super_copy, new_size);
 
 	/*
 	 * Commit transaction to reflect the updated super->total_bytes and
