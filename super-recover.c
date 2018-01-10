@@ -133,7 +133,7 @@ read_dev_supers(char *filename, struct btrfs_recover_superblock *recover)
 							&recover->good_supers);
 			if (ret)
 				goto out;
-			max_gen = btrfs_super_generation(sb);
+			max_gen = btrfs_stack_super_generation(sb);
 			if (max_gen > recover->max_generation)
 				recover->max_generation = max_gen;
 		} else if (ret == -EIO){
@@ -169,7 +169,7 @@ static int read_fs_supers(struct btrfs_recover_superblock *recover)
 	}
 	list_for_each_entry_safe(record, next_record,
 			&recover->good_supers, list) {
-		gen = btrfs_super_generation(&record->sb);
+		gen = btrfs_stack_super_generation(&record->sb);
 		if (gen < recover->max_generation)
 			list_move_tail(&record->list, &recover->bad_supers);
 	}

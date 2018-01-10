@@ -522,7 +522,7 @@ static int find_and_setup_log_root(struct btrfs_root *tree_root,
 			 BTRFS_TREE_LOG_OBJECTID);
 
 	log_root->node = read_tree_block(fs_info, blocknr,
-				     btrfs_super_generation(disk_super) + 1);
+				btrfs_stack_super_generation(disk_super) + 1);
 
 	fs_info->log_root_tree = log_root;
 
@@ -793,7 +793,7 @@ int btrfs_check_fs_compatibility(struct btrfs_super_block *sb,
 static int find_best_backup_root(struct btrfs_super_block *super)
 {
 	struct btrfs_root_backup *backup;
-	u64 orig_gen = btrfs_super_generation(super);
+	u64 orig_gen = btrfs_stack_super_generation(super);
 	u64 gen = 0;
 	int best_index = 0;
 	int i;
@@ -847,7 +847,7 @@ int btrfs_setup_all_roots(struct btrfs_fs_info *fs_info, u64 root_tree_bytenr,
 
 	root = fs_info->tree_root;
 	btrfs_setup_root(root, fs_info, BTRFS_ROOT_TREE_OBJECTID);
-	generation = btrfs_super_generation(sb);
+	generation = btrfs_stack_super_generation(sb);
 
 	if (!root_tree_bytenr && !(flags & OPEN_CTREE_BACKUP_ROOT)) {
 		root_tree_bytenr = btrfs_super_root(sb);
@@ -1486,9 +1486,9 @@ int btrfs_read_dev_super(int fd, struct btrfs_super_block *sb, u64 sb_bytenr,
 			continue;
 		}
 
-		if (btrfs_super_generation(buf) > transid) {
+		if (btrfs_stack_super_generation(buf) > transid) {
 			memcpy(sb, buf, BTRFS_SUPER_INFO_SIZE);
-			transid = btrfs_super_generation(buf);
+			transid = btrfs_stack_super_generation(buf);
 		}
 	}
 
@@ -1603,7 +1603,7 @@ int write_ctree_super(struct btrfs_trans_handle *trans,
 	if (fs_info->readonly)
 		return 0;
 
-	btrfs_set_super_generation(fs_info->super_copy,
+	btrfs_set_stack_super_generation(fs_info->super_copy,
 				   trans->transid);
 	btrfs_set_super_root(fs_info->super_copy,
 			     tree_root->node->start);

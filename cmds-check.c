@@ -8653,7 +8653,7 @@ static int check_space_cache(struct btrfs_root *root)
 	int error = 0;
 
 	if (btrfs_super_cache_generation(root->fs_info->super_copy) != -1ULL &&
-	    btrfs_super_generation(root->fs_info->super_copy) !=
+	    btrfs_stack_super_generation(root->fs_info->super_copy) !=
 	    btrfs_super_cache_generation(root->fs_info->super_copy)) {
 		printf("cache and super generation don't match, space cache "
 		       "will be invalidated\n");

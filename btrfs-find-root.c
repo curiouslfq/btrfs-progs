@@ -65,7 +65,7 @@ static void get_root_gen_and_level(u64 objectid, struct btrfs_fs_info *fs_info,
 	switch (objectid) {
 	case BTRFS_ROOT_TREE_OBJECTID:
 		level = btrfs_super_root_level(super);
-		gen = btrfs_super_generation(super);
+		gen = btrfs_stack_super_generation(super);
 		break;
 	case BTRFS_CHUNK_TREE_OBJECTID:
 		level = btrfs_super_chunk_root_level(super);

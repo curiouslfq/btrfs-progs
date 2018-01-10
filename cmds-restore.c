@@ -1303,7 +1303,7 @@ static struct btrfs_root *open_fs(const char *dev, u64 root_location,
 		root = fs_info->tree_root;
 		if (!root_location)
 			root_location = btrfs_super_root(fs_info->super_copy);
-		generation = btrfs_super_generation(fs_info->super_copy);
+		generation = btrfs_stack_super_generation(fs_info->super_copy);
 		root->node = read_tree_block(fs_info, root_location,
 					     generation);
 		if (!extent_buffer_uptodate(root->node)) {

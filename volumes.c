@@ -89,7 +89,7 @@ static int device_list_add(const char *path,
 {
 	struct btrfs_device *device;
 	struct btrfs_fs_devices *fs_devices;
-	u64 found_transid = btrfs_super_generation(disk_super);
+	u64 found_transid = btrfs_stack_super_generation(disk_super);
 
 	fs_devices = find_fsid(disk_super->fsid);
 	if (!fs_devices) {

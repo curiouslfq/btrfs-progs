@@ -370,7 +370,7 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	putchar('\n');
 
 	printf("generation\t\t%llu\n",
-	       (unsigned long long)btrfs_super_generation(sb));
+	       (unsigned long long)btrfs_stack_super_generation(sb));
 	printf("root\t\t\t%llu\n", (unsigned long long)btrfs_super_root(sb));
 	printf("sys_array_size\t\t%llu\n",
 	       (unsigned long long)btrfs_super_sys_array_size(sb));
