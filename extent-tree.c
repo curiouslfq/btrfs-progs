@@ -347,7 +347,7 @@ btrfs_find_block_group(struct btrfs_root *root, struct btrfs_block_group_cache
 		struct btrfs_block_group_cache *shint;
 		shint = btrfs_lookup_block_group(info, search_start);
 		if (shint && !shint->ro && block_group_bits(shint, data)) {
-			used = btrfs_block_group_used(&shint->item);
+			used = btrfs_stack_block_group_used(&shint->item);
 			if (used + shint->pinned <
 			    div_factor(shint->key.offset, factor)) {
 				return shint;
@@ -355,7 +355,7 @@ btrfs_find_block_group(struct btrfs_root *root, struct btrfs_block_group_cache
 		}
 	}
 	if (hint && !hint->ro && block_group_bits(hint, data)) {
-		used = btrfs_block_group_used(&hint->item);
+		used = btrfs_stack_block_group_used(&hint->item);
 		if (used + hint->pinned <
 		    div_factor(hint->key.offset, factor)) {
 			return hint;
@@ -383,7 +383,7 @@ again:
 
 		cache = (struct btrfs_block_group_cache *)(unsigned long)ptr;
 		last = cache->key.objectid + cache->key.offset;
-		used = btrfs_block_group_used(&cache->item);
+		used = btrfs_stack_block_group_used(&cache->item);
 
 		if (!cache->ro && block_group_bits(cache, data)) {
 			if (full_search)
@@ -1961,7 +1961,7 @@ static int update_block_group(struct btrfs_root *root,
 		set_extent_bits(&info->block_group_cache, start, end,
 				BLOCK_GROUP_DIRTY);
 
-		old_val = btrfs_block_group_used(&cache->item);
+		old_val = btrfs_stack_block_group_used(&cache->item);
 		num_bytes = min(total, cache->key.offset - byte_in_group);
 
 		if (alloc) {
@@ -1975,7 +1975,7 @@ static int update_block_group(struct btrfs_root *root,
 						bytenr, bytenr + num_bytes - 1);
 			}
 		}
-		btrfs_set_block_group_used(&cache->item, old_val);
+		btrfs_set_stack_block_group_used(&cache->item, old_val);
 		total -= num_bytes;
 		bytenr += num_bytes;
 	}
@@ -3290,8 +3290,8 @@ int btrfs_read_block_groups(struct btrfs_root *root)
 		account_super_bytes(info, cache);
 
 		ret = update_space_info(info, cache->flags, found_key.offset,
-					btrfs_block_group_used(&cache->item),
-					&space_info);
+				btrfs_stack_block_group_used(&cache->item),
+				&space_info);
 		BUG_ON(ret);
 		cache->space_info = space_info;
 
@@ -3325,7 +3325,7 @@ btrfs_add_block_group(struct btrfs_fs_info *fs_info, u64 bytes_used, u64 type,
 	cache->key.offset = size;
 
 	cache->key.type = BTRFS_BLOCK_GROUP_ITEM_KEY;
-	btrfs_set_block_group_used(&cache->item, bytes_used);
+	btrfs_set_stack_block_group_used(&cache->item, bytes_used);
 	btrfs_set_block_group_chunk_objectid(&cache->item, chunk_objectid);
 	cache->flags = type;
 	btrfs_set_block_group_flags(&cache->item, type);
@@ -3435,7 +3435,7 @@ int btrfs_make_block_groups(struct btrfs_trans_handle *trans,
 		cache->key.offset = group_size;
 		cache->key.type = BTRFS_BLOCK_GROUP_ITEM_KEY;
 
-		btrfs_set_block_group_used(&cache->item, 0);
+		btrfs_set_stack_block_group_used(&cache->item, 0);
 		btrfs_set_block_group_chunk_objectid(&cache->item,
 						     chunk_objectid);
 		btrfs_set_block_group_flags(&cache->item, group_type);
@@ -3865,7 +3865,7 @@ int btrfs_fix_block_accounting(struct btrfs_trans_handle *trans,
 		if (!cache)
 			break;
 		start = cache->key.objectid + cache->key.offset;
-		btrfs_set_block_group_used(&cache->item, 0);
+		btrfs_set_stack_block_group_used(&cache->item, 0);
 		cache->space_info->bytes_used = 0;
 		set_extent_bits(&root->fs_info->block_group_cache,
 				cache->key.objectid,

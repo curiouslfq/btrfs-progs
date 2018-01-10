@@ -12961,7 +12961,7 @@ static int check_block_group_item(struct btrfs_fs_info *fs_info,
 	btrfs_item_key_to_cpu(eb, &bg_key, slot);
 	bi = btrfs_item_ptr(eb, slot, struct btrfs_block_group_item);
 	read_extent_buffer(eb, &bg_item, (unsigned long)bi, sizeof(bg_item));
-	used = btrfs_block_group_used(&bg_item);
+	used = btrfs_stack_block_group_used(&bg_item);
 	bg_flags = btrfs_block_group_flags(&bg_item);
 
 	chunk_key.objectid = BTRFS_FIRST_CHUNK_TREE_OBJECTID;
