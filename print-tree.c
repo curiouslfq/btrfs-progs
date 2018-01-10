@@ -585,7 +585,7 @@ static void print_root_item(struct extent_buffer *leaf, int slot)
 
 	memset(&root_item, 0, sizeof(root_item));
 	read_extent_buffer(leaf, &root_item, (unsigned long)ri, len);
-	root_flags_to_str(btrfs_root_flags(&root_item), flags_str);
+	root_flags_to_str(btrfs_stack_root_flags(&root_item), flags_str);
 
 	printf("\t\tgeneration %llu root_dirid %llu bytenr %llu level %hhu refs %u\n",
 		(unsigned long long)btrfs_stack_root_generation(&root_item),
@@ -597,7 +597,7 @@ static void print_root_item(struct extent_buffer *leaf, int slot)
 		(unsigned long long)btrfs_root_last_snapshot(&root_item),
 		(unsigned long long)btrfs_root_limit(&root_item),
 		(unsigned long long)btrfs_root_used(&root_item),
-		(unsigned long long)btrfs_root_flags(&root_item),
+		(unsigned long long)btrfs_stack_root_flags(&root_item),
 		flags_str);
 
 	if (root_item.generation == root_item.generation_v2) {

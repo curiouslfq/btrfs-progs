@@ -1024,7 +1024,7 @@ static int list_subvol_search(int fd, struct root_lookup *root_lookup)
 
 				ri = (struct btrfs_root_item *)(args.buf + off);
 				gen = btrfs_stack_root_generation(ri);
-				flags = btrfs_root_flags(ri);
+				flags = btrfs_stack_root_flags(ri);
 				if(sh.len >
 				   sizeof(struct btrfs_root_item_v0)) {
 					otime = btrfs_stack_timespec_sec(&ri->otime);
