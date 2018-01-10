@@ -416,7 +416,7 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	printf("cache_generation\t%llu\n",
 	       (unsigned long long)btrfs_stack_super_cache_generation(sb));
 	printf("uuid_tree_generation\t%llu\n",
-	       (unsigned long long)btrfs_super_uuid_tree_generation(sb));
+	       (unsigned long long)btrfs_stack_super_uuid_tree_generation(sb));
 
 	uuid_unparse(sb->dev_item.uuid, buf);
 	printf("dev_item.uuid\t\t%s\n", buf);
