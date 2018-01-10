@@ -178,7 +178,7 @@ static void print_root_backup(struct btrfs_root_backup *backup)
 			btrfs_stack_backup_csum_root_level(backup));
 
 	printf("\t\tbackup_total_bytes:\t%llu\n",
-					btrfs_backup_total_bytes(backup));
+					btrfs_stack_backup_total_bytes(backup));
 	printf("\t\tbackup_bytes_used:\t%llu\n",
 					btrfs_backup_bytes_used(backup));
 	printf("\t\tbackup_num_devices:\t%llu\n",
