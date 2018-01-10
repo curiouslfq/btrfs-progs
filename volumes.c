@@ -712,7 +712,7 @@ int btrfs_add_system_chunk(struct btrfs_fs_info *fs_info, struct btrfs_key *key,
 	u32 array_size;
 	u8 *ptr;
 
-	array_size = btrfs_super_sys_array_size(super_copy);
+	array_size = btrfs_stack_super_sys_array_size(super_copy);
 	if (array_size + item_size + sizeof(disk_key)
 			> BTRFS_SYSTEM_CHUNK_ARRAY_SIZE)
 		return -EFBIG;
@@ -723,7 +723,8 @@ int btrfs_add_system_chunk(struct btrfs_fs_info *fs_info, struct btrfs_key *key,
 	ptr += sizeof(disk_key);
 	memcpy(ptr, chunk, item_size);
 	item_size += sizeof(disk_key);
-	btrfs_set_super_sys_array_size(super_copy, array_size + item_size);
+	btrfs_set_stack_super_sys_array_size(super_copy,
+					     array_size + item_size);
 	return 0;
 }
 
@@ -1995,7 +1996,7 @@ int btrfs_read_sys_array(struct btrfs_fs_info *fs_info)
 		return -ENOMEM;
 	btrfs_set_buffer_uptodate(sb);
 	write_extent_buffer(sb, super_copy, 0, sizeof(*super_copy));
-	array_size = btrfs_super_sys_array_size(super_copy);
+	array_size = btrfs_stack_super_sys_array_size(super_copy);
 
 	array_ptr = super_copy->sys_chunk_array;
 	sb_array_offset = offsetof(struct btrfs_super_block, sys_chunk_array);

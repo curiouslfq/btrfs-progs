@@ -3596,12 +3596,12 @@ static int free_system_chunk_item(struct btrfs_super_block *super,
 {
 	struct btrfs_disk_key *disk_key;
 	struct btrfs_key cpu_key;
-	u32 array_size = btrfs_super_sys_array_size(super);
+	u32 array_size = btrfs_stack_super_sys_array_size(super);
 	char *ptr = (char *)super->sys_chunk_array;
 	int cur = 0;
 	int ret = -ENOENT;
 
-	while (cur < btrfs_super_sys_array_size(super)) {
+	while (cur < btrfs_stack_super_sys_array_size(super)) {
 		struct btrfs_chunk *chunk;
 		u32 num_stripes;
 		u32 chunk_len;
@@ -3625,7 +3625,7 @@ static int free_system_chunk_item(struct btrfs_super_block *super,
 			memmove(ptr + cur, ptr + cur + chunk_len,
 				array_size - cur - chunk_len);
 			array_size -= chunk_len;
-			btrfs_set_super_sys_array_size(super, array_size);
+			btrfs_set_stack_super_sys_array_size(super, array_size);
 			ret = 0;
 			goto out;
 		}

@@ -346,7 +346,7 @@ int make_btrfs(int fd, struct btrfs_mkfs_config *cfg)
 	read_extent_buffer(buf, ptr, (unsigned long)chunk, item_size);
 	array_size += item_size;
 	ptr += item_size;
-	btrfs_set_super_sys_array_size(&super, array_size);
+	btrfs_set_stack_super_sys_array_size(&super, array_size);
 
 	btrfs_set_header_bytenr(buf, cfg->blocks[MKFS_CHUNK_TREE]);
 	btrfs_set_header_owner(buf, BTRFS_CHUNK_TREE_OBJECTID);

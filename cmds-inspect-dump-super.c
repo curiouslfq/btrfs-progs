@@ -68,7 +68,7 @@ static void print_sys_chunk_array(struct btrfs_super_block *sb)
 	}
 	write_extent_buffer(buf, sb, 0, sizeof(*sb));
 	buf->len = sizeof(*sb);
-	array_size = btrfs_super_sys_array_size(sb);
+	array_size = btrfs_stack_super_sys_array_size(sb);
 
 	array_ptr = sb->sys_chunk_array;
 	sb_array_offset = offsetof(struct btrfs_super_block, sys_chunk_array);
@@ -374,7 +374,7 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	printf("root\t\t\t%llu\n",
 	       (unsigned long long)btrfs_stack_super_root(sb));
 	printf("sys_array_size\t\t%llu\n",
-	       (unsigned long long)btrfs_super_sys_array_size(sb));
+	       (unsigned long long)btrfs_stack_super_sys_array_size(sb));
 	printf("chunk_root_generation\t%llu\n",
 	       (unsigned long long)btrfs_super_chunk_root_generation(sb));
 	printf("root_level\t\t%llu\n",

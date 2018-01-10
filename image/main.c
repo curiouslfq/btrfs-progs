@@ -1116,7 +1116,8 @@ static void update_super_old(u8 *buffer)
 	chunk->stripe.devid = super->dev_item.devid;
 	btrfs_set_stack_stripe_offset(&chunk->stripe, 0);
 	memcpy(chunk->stripe.dev_uuid, super->dev_item.uuid, BTRFS_UUID_SIZE);
-	btrfs_set_super_sys_array_size(super, sizeof(*key) + sizeof(*chunk));
+	btrfs_set_stack_super_sys_array_size(super,
+					     sizeof(*key) + sizeof(*chunk));
 	csum_block(buffer, BTRFS_SUPER_INFO_SIZE);
 }
 
@@ -1134,7 +1135,7 @@ static int update_super(struct mdrestore_struct *mdres, u8 *buffer)
 	int old_num_stripes;
 
 	write_ptr = ptr = super->sys_chunk_array;
-	array_size = btrfs_super_sys_array_size(super);
+	array_size = btrfs_stack_super_sys_array_size(super);
 
 	while (cur < array_size) {
 		disk_key = (struct btrfs_disk_key *)ptr;
@@ -1188,7 +1189,7 @@ static int update_super(struct mdrestore_struct *mdres, u8 *buffer)
 
 	flags |= BTRFS_SUPER_FLAG_METADUMP_V2;
 	btrfs_set_stack_super_flags(super, flags);
-	btrfs_set_super_sys_array_size(super, new_array_size);
+	btrfs_set_stack_super_sys_array_size(super, new_array_size);
 	btrfs_set_super_num_devices(super, 1);
 	csum_block(buffer, BTRFS_SUPER_INFO_SIZE);
 

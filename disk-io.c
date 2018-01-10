@@ -1399,16 +1399,17 @@ static int check_super(struct btrfs_super_block *sb, unsigned sbflags)
 	 * Obvious sys_chunk_array corruptions, it must hold at least one key
 	 * and one chunk
 	 */
-	if (btrfs_super_sys_array_size(sb) > BTRFS_SYSTEM_CHUNK_ARRAY_SIZE) {
+	if (btrfs_stack_super_sys_array_size(sb) >
+			BTRFS_SYSTEM_CHUNK_ARRAY_SIZE) {
 		error("system chunk array too big %u > %u",
-		      btrfs_super_sys_array_size(sb),
+		      btrfs_stack_super_sys_array_size(sb),
 		      BTRFS_SYSTEM_CHUNK_ARRAY_SIZE);
 		goto error_out;
 	}
-	if (btrfs_super_sys_array_size(sb) < sizeof(struct btrfs_disk_key)
+	if (btrfs_stack_super_sys_array_size(sb) < sizeof(struct btrfs_disk_key)
 			+ sizeof(struct btrfs_chunk)) {
 		error("system chunk array too small %u < %zu",
-		      btrfs_super_sys_array_size(sb),
+		      btrfs_stack_super_sys_array_size(sb),
 		      sizeof(struct btrfs_disk_key) +
 		      sizeof(struct btrfs_chunk));
 		goto error_out;
