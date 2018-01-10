@@ -171,7 +171,7 @@ static void print_root_backup(struct btrfs_root_backup *backup)
 	printf("\t\tbackup_dev_root:\t%llu\tgen: %llu\tlevel: %d\n",
 			btrfs_stack_backup_dev_root(backup),
 			btrfs_stack_backup_dev_root_gen(backup),
-			btrfs_backup_dev_root_level(backup));
+			btrfs_stack_backup_dev_root_level(backup));
 	printf("\t\tbackup_csum_root:\t%llu\tgen: %llu\tlevel: %d\n",
 			btrfs_backup_csum_root(backup),
 			btrfs_backup_csum_root_gen(backup),
