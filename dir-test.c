@@ -445,7 +445,7 @@ int main(int ac, char **av)
 	trans = btrfs_start_transaction(root, 1);
 	BUG_ON(IS_ERR(trans));
 
-	dir_oid = btrfs_super_root_dir(&super);
+	dir_oid = btrfs_stack_super_root_dir(&super);
 
 	signal(SIGTERM, sigstopper);
 	signal(SIGINT, sigstopper);

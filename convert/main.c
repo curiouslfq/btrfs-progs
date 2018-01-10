@@ -972,13 +972,13 @@ static int init_btrfs(struct btrfs_mkfs_config *cfg, struct btrfs_root *root,
 	memcpy(&location, &root->root_key, sizeof(location));
 	location.offset = (u64)-1;
 	ret = btrfs_insert_dir_item(trans, fs_info->tree_root, "default", 7,
-				btrfs_super_root_dir(fs_info->super_copy),
+				btrfs_stack_super_root_dir(fs_info->super_copy),
 				&location, BTRFS_FT_DIR, 0);
 	if (ret)
 		goto err;
 	ret = btrfs_insert_inode_ref(trans, fs_info->tree_root, "default", 7,
-				location.objectid,
-				btrfs_super_root_dir(fs_info->super_copy), 0);
+			location.objectid,
+			btrfs_stack_super_root_dir(fs_info->super_copy), 0);
 	if (ret)
 		goto err;
 	btrfs_set_stack_root_dirid(&fs_info->fs_root->root_item,

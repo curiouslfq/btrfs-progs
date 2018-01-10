@@ -402,7 +402,7 @@ static void dump_superblock(struct btrfs_super_block *sb, int full)
 	printf("stripesize\t\t%llu\n",
 	       (unsigned long long)btrfs_stack_super_stripesize(sb));
 	printf("root_dir\t\t%llu\n",
-	       (unsigned long long)btrfs_super_root_dir(sb));
+	       (unsigned long long)btrfs_stack_super_root_dir(sb));
 	printf("num_devices\t\t%llu\n",
 	       (unsigned long long)btrfs_super_num_devices(sb));
 	printf("compat_flags\t\t0x%llx\n",

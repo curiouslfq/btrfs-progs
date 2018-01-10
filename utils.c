@@ -393,7 +393,8 @@ int btrfs_make_root_dir(struct btrfs_trans_handle *trans,
 	btrfs_set_stack_timespec_nsec(&inode_item.otime, 0);
 
 	if (root->fs_info->tree_root == root)
-		btrfs_set_super_root_dir(root->fs_info->super_copy, objectid);
+		btrfs_set_stack_super_root_dir(root->fs_info->super_copy,
+					       objectid);
 
 	ret = btrfs_insert_inode(trans, root, objectid, &inode_item);
 	if (ret)
