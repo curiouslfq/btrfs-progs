@@ -1536,7 +1536,7 @@ static int recover_prepare(struct recover_control *rc, char *path)
 	rc->sectorsize = btrfs_super_sectorsize(sb);
 	rc->nodesize = btrfs_super_nodesize(sb);
 	rc->generation = btrfs_stack_super_generation(sb);
-	rc->chunk_root_generation = btrfs_super_chunk_root_generation(sb);
+	rc->chunk_root_generation = btrfs_stack_super_chunk_root_generation(sb);
 	rc->csum_size = btrfs_super_csum_size(sb);
 
 	/* if seed, the result of scanning below will be partial */

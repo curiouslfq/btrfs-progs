@@ -1041,7 +1041,7 @@ int btrfs_setup_chunk_tree_and_device_map(struct btrfs_fs_info *fs_info,
 	if (ret)
 		return ret;
 
-	generation = btrfs_super_chunk_root_generation(sb);
+	generation = btrfs_stack_super_chunk_root_generation(sb);
 
 	if (chunk_root_bytenr && !IS_ALIGNED(chunk_root_bytenr,
 					    fs_info->sectorsize)) {
@@ -1615,7 +1615,7 @@ int write_ctree_super(struct btrfs_trans_handle *trans,
 				   chunk_root->node->start);
 	btrfs_set_super_chunk_root_level(fs_info->super_copy,
 					 btrfs_header_level(chunk_root->node));
-	btrfs_set_super_chunk_root_generation(fs_info->super_copy,
+	btrfs_set_stack_super_chunk_root_generation(fs_info->super_copy,
 				btrfs_header_generation(chunk_root->node));
 
 	ret = write_all_supers(fs_info);
