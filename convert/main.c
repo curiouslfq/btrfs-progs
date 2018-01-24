@@ -1003,6 +1003,61 @@ err:
 }
 
 /*
+ * Link the subvolume specified by @root_objectid to the root_dir of @root.
+ *
+ * @root		the root of the file tree which the subvolume will
+ *			be linked to.
+ * @subvol_name		the name of the subvolume which will be named.
+ * @root_objectid	specify the subvolume which will be linked.
+ *
+ * Return the root of the subvolume if success, otherwise return NULL.
+ */
+static struct btrfs_root *link_subvol_for_convert(struct btrfs_root *root,
+						  const char *subvol_name,
+						  u64 root_objectid)
+{
+	struct btrfs_trans_handle *trans;
+	struct btrfs_root *subvol_root = NULL;
+	struct btrfs_key key;
+	u64 dirid = btrfs_root_dirid(&root->root_item);
+	int ret;
+
+	/*
+	 * 2 for dir's dir_index and dir_item for the subvolume
+	 * 2 for the subvolume's root_ref and root_backref
+	 */
+	trans = btrfs_start_transaction(root, 4);
+	if (IS_ERR(trans)) {
+		error("unable to start transaction");
+		goto fail;
+	}
+
+	ret = btrfs_link_subvol(trans, root, subvol_name, root_objectid, dirid,
+				true);
+	if (ret) {
+		error("unable to link subvolume %s", subvol_name);
+		goto fail;
+	}
+
+	ret = btrfs_commit_transaction(trans, root);
+	if (ret) {
+		error("transaction commit failed: %d", ret);
+		goto fail;
+	}
+
+	key.objectid = root_objectid;
+	key.offset = (u64)-1;
+	key.type = BTRFS_ROOT_ITEM_KEY;
+
+	subvol_root = btrfs_read_fs_root(root->fs_info, &key);
+	if (!subvol_root)
+		error("unable to link subvolume %s", subvol_name);
+
+fail:
+	return subvol_root;
+}
+
+/*
  * Migrate super block to its default position and zero 0 ~ 16k
  */
 static int migrate_super_block(int fd, u64 old_bytenr)
@@ -1194,8 +1249,8 @@ static int do_convert(const char *devname, u32 convert_flags, u32 nodesize,
 		task_deinit(ctx.info);
 	}
 
-	image_root = btrfs_mksubvol(root, subvol_name,
-				    CONV_IMAGE_SUBVOL_OBJECTID, true);
+	image_root = link_subvol_for_convert(root, subvol_name,
+					     CONV_IMAGE_SUBVOL_OBJECTID);
 	if (!image_root) {
 		error("unable to link subvolume %s", subvol_name);
 		goto fail;

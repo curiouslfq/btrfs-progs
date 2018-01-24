@@ -606,20 +606,31 @@ out:
 	return ret;
 }
 
-struct btrfs_root *btrfs_mksubvol(struct btrfs_root *root,
-				  const char *base, u64 root_objectid,
-				  bool convert)
+/*
+ * Link the subvolume specified by @root_objectid to the directory specified by
+ * @dirid on the file tree specified by @root.
+ *
+ * @root		the root of the file tree where the directory on.
+ * @base		the name of the subvolume which will be linked.
+ * @root_objectid	specify the subvolume which will be linked.
+ * @dirid		specify the directory which the subvolume will be
+ *			linked to.
+ * @resolve_conflict	the flag to determine whether to try to resolve
+ *			the name conflict.
+ */
+int btrfs_link_subvol(struct btrfs_trans_handle *trans, struct btrfs_root *root,
+		      const char *base, u64 root_objectid, u64 dirid,
+		      bool resolve_conflict)
 {
-	struct btrfs_trans_handle *trans;
 	struct btrfs_fs_info *fs_info = root->fs_info;
 	struct btrfs_root *tree_root = fs_info->tree_root;
-	struct btrfs_root *new_root = NULL;
 	struct btrfs_path path;
 	struct btrfs_inode_item *inode_item;
+	struct btrfs_root_item root_item;
 	struct extent_buffer *leaf;
 	struct btrfs_key key;
-	u64 dirid = btrfs_root_dirid(&root->root_item);
 	u64 index = 2;
+	u64 offset;
 	char buf[BTRFS_NAME_LEN + 1]; /* for snprintf null */
 	int len;
 	int i;
@@ -627,8 +638,9 @@ struct btrfs_root *btrfs_mksubvol(struct btrfs_root *root,
 
 	len = strlen(base);
 	if (len == 0 || len > BTRFS_NAME_LEN)
-		return NULL;
+		return -EINVAL;
 
+	/* find the free dir_index */
 	btrfs_init_path(&path);
 	key.objectid = dirid;
 	key.type = BTRFS_DIR_INDEX_KEY;
@@ -649,12 +661,7 @@ struct btrfs_root *btrfs_mksubvol(struct btrfs_root *root,
 	}
 	btrfs_release_path(&path);
 
-	trans = btrfs_start_transaction(root, 1);
-	if (IS_ERR(trans)) {
-		error("unable to start transaction");
-		goto fail;
-	}
-
+	/* add the dir_item/dir_index */
 	key.objectid = dirid;
 	key.offset = 0;
 	key.type =  BTRFS_INODE_ITEM_KEY;
@@ -674,7 +681,8 @@ struct btrfs_root *btrfs_mksubvol(struct btrfs_root *root,
 	key.type = BTRFS_ROOT_ITEM_KEY;
 
 	memcpy(buf, base, len);
-	if (convert) {
+	if (resolve_conflict) {
+		/* try to resolve name conflict by adding the number suffix */
 		for (i = 0; i < 1024; i++) {
 			ret = btrfs_insert_dir_item(trans, root, buf, len,
 					dirid, &key, BTRFS_FT_DIR, index);
@@ -719,18 +727,30 @@ struct btrfs_root *btrfs_mksubvol(struct btrfs_root *root,
 		goto fail;
 	}
 
-	ret = btrfs_commit_transaction(trans, root);
+
+	/* set root refs of the subvolume to 1 */
+	key.objectid = root_objectid;
+	key.type = BTRFS_ROOT_ITEM_KEY;
+	key.offset = 0;
+
+	ret = btrfs_search_slot(trans, tree_root, &key, &path, 0, 0);
 	if (ret) {
-		error("transaction commit failed: %d", ret);
+		error("couldn't find ROOT_ITEM for %llu failed: %d",
+				root_objectid, ret);
 		goto fail;
 	}
 
-	new_root = btrfs_read_fs_root(fs_info, &key);
-	if (IS_ERR(new_root)) {
-		error("unable to fs read root: %lu", PTR_ERR(new_root));
-		new_root = NULL;
-	}
+	leaf = path.nodes[0];
+
+	offset = btrfs_item_ptr_offset(leaf, path.slots[0]);
+	read_extent_buffer(leaf, &root_item, offset, sizeof(root_item));
+
+	btrfs_set_root_refs(&root_item, 1);
+
+	write_extent_buffer(leaf, &root_item, offset, sizeof(root_item));
+	btrfs_mark_buffer_dirty(leaf);
+
 fail:
-	btrfs_init_path(&path);
-	return new_root;
+	btrfs_release_path(&path);
+	return ret;
 }
