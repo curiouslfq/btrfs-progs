@@ -186,6 +186,7 @@ static int btrfs_csum_sizes[] = { 4 };
 #define BTRFS_FT_MAX		9
 
 #define BTRFS_ROOT_SUBVOL_RDONLY	(1ULL << 0)
+#define BTRFS_ROOT_SUBVOL_DEAD		(1ULL << 48)
 
 /*
  * the key defines the order in the tree, and so it also defines (optimal)
