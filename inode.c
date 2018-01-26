@@ -629,7 +629,7 @@ int btrfs_link_subvol(struct btrfs_trans_handle *trans, struct btrfs_root *root,
 	struct btrfs_root_item root_item;
 	struct extent_buffer *leaf;
 	struct btrfs_key key;
-	u64 index = 2;
+	u64 index;
 	u64 offset;
 	char buf[BTRFS_NAME_LEN + 1]; /* for snprintf null */
 	int len;
@@ -640,28 +640,15 @@ int btrfs_link_subvol(struct btrfs_trans_handle *trans, struct btrfs_root *root,
 	if (len == 0 || len > BTRFS_NAME_LEN)
 		return -EINVAL;
 
-	/* find the free dir_index */
-	btrfs_init_path(&path);
-	key.objectid = dirid;
-	key.type = BTRFS_DIR_INDEX_KEY;
-	key.offset = (u64)-1;
-
-	ret = btrfs_search_slot(NULL, root, &key, &path, 0, 0);
-	if (ret <= 0) {
-		error("search for DIR_INDEX dirid %llu failed: %d",
-				(unsigned long long)dirid, ret);
+	/* add the dir_item/dir_index */
+	ret = btrfs_find_free_dir_index(root, dirid, &index);
+	if (ret < 0) {
+		error("unable to find free dir index dirid %llu failed: %d",
+		      (unsigned long long)dirid, ret);
 		goto fail;
 	}
 
-	if (path.slots[0] > 0) {
-		path.slots[0]--;
-		btrfs_item_key_to_cpu(path.nodes[0], &key, path.slots[0]);
-		if (key.objectid == dirid && key.type == BTRFS_DIR_INDEX_KEY)
-			index = key.offset + 1;
-	}
-	btrfs_release_path(&path);
-
-	/* add the dir_item/dir_index */
+	btrfs_init_path(&path);
 	key.objectid = dirid;
 	key.offset = 0;
 	key.type =  BTRFS_INODE_ITEM_KEY;
