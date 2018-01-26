@@ -7,6 +7,7 @@
 #include "disk-io.h"
 #include "transaction.h"
 #include "messages.h"
+#include "undelete-subvol.h"
 
 /*
  * Determines whether the subvolume is intact, according to the drop_progress
@@ -153,5 +154,74 @@ static int link_subvol_to_lostfound(struct btrfs_fs_info *fs_info,
 	}
 
 out:
+	return ret;
+}
+
+/*
+ * Traverse all orphan items on the root tree, restore them to the lost+found
+ * directory if the corresponding subvolumes are still intact left on the disk.
+ *
+ * @subvol_id	if not set to 0, skip other subvolumes and only recover the
+ *		subvolume specified by @subvol_id.
+ *
+ * Return 0 if no error occurred even if no subvolume was recovered.
+ */
+int btrfs_undelete_subvols(struct btrfs_fs_info *fs_info, u64 subvol_id)
+{
+	struct btrfs_root *root = fs_info->tree_root;
+	struct btrfs_key key;
+	struct btrfs_path path;
+	u64 found_count = 0;
+	u64 recovered_count = 0;
+	int ret = 0;
+
+	key.objectid = BTRFS_ORPHAN_OBJECTID;
+	key.type = BTRFS_ORPHAN_ITEM_KEY;
+	key.offset = subvol_id ? subvol_id + 1 : (u64)-1;
+
+	btrfs_init_path(&path);
+	while (subvol_id != key.offset) {
+		ret = btrfs_search_slot(NULL, root, &key, &path, 0, 0);
+		if (ret < 0) {
+			error("search ORPHAN_ITEM for %llu failed.\n",
+			      key.offset);
+			btrfs_release_path(&path);
+			break;
+		}
+
+		ret = btrfs_previous_item(root, &path, BTRFS_ORPHAN_OBJECTID,
+					  BTRFS_ORPHAN_ITEM_KEY);
+		if (ret) {
+			btrfs_release_path(&path);
+			break;
+		}
+
+		btrfs_item_key_to_cpu(path.nodes[0], &key, path.slots[0]);
+		btrfs_release_path(&path);
+
+		/* If subvol_id is non-zero, skip other deleted subvolume. */
+		if (subvol_id && subvol_id != key.offset) {
+			ret = -ENOENT;
+			break;
+		}
+
+		if (!is_subvol_intact(fs_info, key.offset))
+			continue;
+
+		/* Here we can confirm there is an intact subvolume. */
+		found_count++;
+		ret = link_subvol_to_lostfound(fs_info, key.offset);
+		if (ret == 0) {
+			recovered_count++;
+			printf(
+		"Recovered subvolume %llu to lost+found successfully.\n",
+				key.offset);
+		}
+
+	}
+
+	printf("Found %llu deleted subvols left intact\n", found_count);
+	printf("Recovered %llu deleted subvols\n", found_count);
+
 	return ret;
 }
