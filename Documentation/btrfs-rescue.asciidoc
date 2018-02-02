@@ -60,6 +60,18 @@ assume an answer of 'yes' to all questions.
 -v::::
 verbose mode.
 
+*undelete-subvol* <device>::
+Undelete deleted subvolumes that still left intact on the device.
++
+This command will create the lost+found directory, and recover all the
+subvolumes to this directory with the name "sub<id>". If -s <subvolid> option
+is given, then just recover the subvolume which specified by <subvolid>.
++
+`Options`
++
+-s::::
+specify the subvolume which will be recovered.
+
 *zero-log* <device>::
 clear the filesystem log tree
 +
